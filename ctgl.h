@@ -1,4 +1,8 @@
 #include <algorithm>
+#include <iostream>
+#include <typeinfo>
+
+#include "list.h"
 
 // CTGL Constants
 // -----------------------------------------------------------------------------
@@ -10,15 +14,22 @@ namespace ctgl {
 // CTGL Data Structures
 // -----------------------------------------------------------------------------
 namespace ctgl {
-    // List represents the list of types specified by |Ts|.
-    template <typename... Ts>
-    struct List {};
-
     // Node represents a graph node with the given ID and edges.
-    template <int ID, typename... Es>
+    template <int ID>
     struct Node {
         static constexpr int id = ID;
-        using EdgeList = List<Es...>;
+    };
+
+    template<typename F, typename T>
+    struct Edge {
+        using From = F;
+        using To = T;
+    };
+
+    template <typename N, typename E>
+    struct Graph {
+        using NodeList = N;
+        using EdgeList = E;
     };
 }
 
@@ -30,9 +41,36 @@ namespace ctgl {
     constexpr int dfs(S, T);
 }
 
+
 // CTGL Implementation
 // -----------------------------------------------------------------------------
 namespace ctgl {
+    // Graph
+    namespace detail {
+        template <typename G, typename N>
+        constexpr auto findEdges(G, N) -> decltype(findEdges(N{}, typename G::EdgeList{}));
+
+
+        template <typename N>
+        constexpr auto findEdges(N, List<>) -> List<>;
+
+        template <typename N, typename E, typename... Es>
+        constexpr auto findEdges(N, List<E, Es...>) -> decltype(findEdges(N{}, typename E::From{}, typename E::To{}, List<Es...>{}));
+
+
+        template <typename N, typename F, typename T>
+        constexpr auto findEdges(N, F, T, List<>) -> List<>;
+    
+        template <typename N, typename F, typename T, typename E, typename... Es>
+        constexpr auto findEdges(N, F, T, List<E, Es...>) -> decltype(findEdges(T{}, typename E::From{}, typename E::To{}, List<Es...>{}));
+
+        template <typename N, typename T>
+        constexpr auto findEdges(N, N, T, List<>) -> List<T>;
+
+        template <typename N, typename T, typename E, typename... Es>
+        constexpr auto findEdges(N, N, T, List<E, Es...>) -> decltype(push(T{}, findEdges(N{}, typename E::From{}, typename E::To{}, List<Es...>{})));
+    }
+
     // DFS
     namespace detail {
         template <typename S, typename T, typename N, typename... Es> constexpr int dfs(S, T, List<N, Es...>);
@@ -71,8 +109,8 @@ namespace ctgl {
         }
     }
 
-    template <typename S, typename T>
-    constexpr int dfs(S, T) {
-        return detail::dfs(S{}, T{}, typename S::EdgeList{});
+    template <typename G, typename S, typename T>
+    constexpr int dfs(G, S, T) {
+        return detail::dfs(G{}, S{}, T{}, typename S::EdgeList{});
     }
 }

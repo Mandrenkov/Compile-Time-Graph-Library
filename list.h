@@ -12,7 +12,7 @@ namespace ctgl {
 
     // Returns a new List that is the concatenation of the given Lists.
     template <typename... Ts, typename... Us>
-    constexpr auto concat(List<Ts...>, List<Us...>) -> List<Ts..., Us...>;
+    constexpr auto link(List<Ts...>, List<Us...>) -> List<Ts..., Us...>;
 
     // Returns a new List that is constructed by pushing |T| to the front of the given List.
     template <typename T, typename... Ts>

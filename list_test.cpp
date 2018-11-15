@@ -29,21 +29,21 @@ TEST(ListTest, LinkBoth) {
     EXPECT_TRUE((std::is_same<LinkType<List<int, bool>, List<float, double>>, List<int, bool, float, double>>::value));
 }
 
-// push() Unit Tests
+// append() Unit Tests
 // -----------------------------------------------------------------------------
 template <typename T, typename U>
-using PushType = decltype(push(T{}, U{}));
+using AppendType = decltype(append(T{}, U{}));
 
-TEST(ListTest, PushEmpty) {
-    EXPECT_TRUE((std::is_same<PushType<int, List<>>, List<int>>::value));
+TEST(ListTest, AppendEmpty) {
+    EXPECT_TRUE((std::is_same<AppendType<int, List<>>, List<int>>::value));
 }
 
-TEST(ListTest, PushSingle) {
-    EXPECT_TRUE((std::is_same<PushType<int, List<bool>>, List<int, bool>>::value));
+TEST(ListTest, AppendSingle) {
+    EXPECT_TRUE((std::is_same<AppendType<int, List<bool>>, List<int, bool>>::value));
 }
 
-TEST(ListTest, PushMultiple) {
-   EXPECT_TRUE((std::is_same<PushType<int, List<float, double>>, List<int, float, double>>::value));
+TEST(ListTest, AppendMultiple) {
+   EXPECT_TRUE((std::is_same<AppendType<int, List<float, double>>, List<int, float, double>>::value));
 }
 
 // pop() Unit Tests

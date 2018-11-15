@@ -39,11 +39,11 @@ TEST(ListTest, AppendEmpty) {
 }
 
 TEST(ListTest, AppendSingle) {
-    EXPECT_TRUE((std::is_same<AppendType<int, List<bool>>, List<int, bool>>::value));
+    EXPECT_TRUE((std::is_same<AppendType<int, List<bool>>, List<bool, int>>::value));
 }
 
 TEST(ListTest, AppendMultiple) {
-   EXPECT_TRUE((std::is_same<AppendType<int, List<float, double>>, List<int, float, double>>::value));
+   EXPECT_TRUE((std::is_same<AppendType<int, List<float, double>>, List<float, double, int>>::value));
 }
 
 // pop() Unit Tests

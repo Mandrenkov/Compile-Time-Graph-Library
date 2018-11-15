@@ -14,9 +14,9 @@ namespace ctgl {
     template <typename... Ts, typename... Us>
     constexpr auto link(List<Ts...>, List<Us...>) -> List<Ts..., Us...>;
 
-    // Returns a new List that is constructed by appending |T| to the front of the given List.
+    // Returns a new List that is constructed by appending |T| to the end of the given List.
     template <typename T, typename... Ts>
-    constexpr auto append(T, List<Ts...>) -> List<T, Ts...>;
+    constexpr auto append(T, List<Ts...>) -> List<Ts..., T>;
 
     // Returns a new List that is constructed by popping the type at the front of the given List.
     template <typename T, typename... Ts>

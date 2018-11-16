@@ -3,7 +3,7 @@
 #include "ctgl.h"
 
 int main() {
-    std::cout << "Running the Compile Time Graph Library...\n\n";
+    std::cout << "Running the Compile Time Graph Library...\n";
 
     using namespace ctgl;
 

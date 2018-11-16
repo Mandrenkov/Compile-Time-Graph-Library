@@ -14,13 +14,23 @@ namespace ctgl {
     template <typename... Ts, typename... Us>
     constexpr auto link(List<Ts...>, List<Us...>) -> List<Ts..., Us...>;
 
-    // Returns a new List that is constructed by appending |T| to the end of the given List.
+    // Returns a new List that is constructed by pushing |T| to the front of the given List.
     template <typename T, typename... Ts>
-    constexpr auto append(T, List<Ts...>) -> List<Ts..., T>;
+    constexpr auto push(T, List<Ts...>) -> List<T, Ts...>;
 
     // Returns a new List that is constructed by popping the type at the front of the given List.
     template <typename T, typename... Ts>
     constexpr auto pop(List<T, Ts...>) -> List<Ts...>;
+
+    // Returns a new List that is constructed by removing all occurrences of type |T| from the given List.
+    template <typename T, typename F, typename... Ts>
+    constexpr auto remove(T, List<F, Ts...>) -> decltype(push(F{}, remove(T{}, List<Ts...>{})));
+
+    template <typename T, typename... Ts>
+    constexpr auto remove(T, List<T, Ts...>) -> decltype(remove(T{}, List<Ts...>{}));
+
+    template <typename T>
+    constexpr auto remove(T, List<>) -> List<>;
 
     // Returns the type at the front of the given List.
     template <typename T, typename... Ts>

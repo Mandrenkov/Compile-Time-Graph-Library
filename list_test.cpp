@@ -29,21 +29,21 @@ TEST(ListTest, LinkBoth) {
     EXPECT_TRUE((std::is_same<LinkType<List<int, bool>, List<float, double>>, List<int, bool, float, double>>::value));
 }
 
-// append() Unit Tests
+// push() Unit Tests
 // -----------------------------------------------------------------------------
 template <typename T, typename U>
-using AppendType = decltype(append(T{}, U{}));
+using PushType = decltype(push(T{}, U{}));
 
-TEST(ListTest, AppendEmpty) {
-    EXPECT_TRUE((std::is_same<AppendType<int, List<>>, List<int>>::value));
+TEST(ListTest, PushEmpty) {
+    EXPECT_TRUE((std::is_same<PushType<int, List<>>, List<int>>::value));
 }
 
-TEST(ListTest, AppendSingle) {
-    EXPECT_TRUE((std::is_same<AppendType<int, List<bool>>, List<bool, int>>::value));
+TEST(ListTest, PushSingle) {
+    EXPECT_TRUE((std::is_same<PushType<int, List<bool>>, List<int, bool>>::value));
 }
 
-TEST(ListTest, AppendMultiple) {
-   EXPECT_TRUE((std::is_same<AppendType<int, List<float, double>>, List<float, double, int>>::value));
+TEST(ListTest, PushMultiple) {
+   EXPECT_TRUE((std::is_same<PushType<int, List<float, double>>, List<int, float, double>>::value));
 }
 
 // pop() Unit Tests
@@ -57,6 +57,26 @@ TEST(ListTest, PopSingle) {
 
 TEST(ListTest, PopMultiple) {
     EXPECT_TRUE((std::is_same<PopType<List<int, float, double>>, List<float, double>>::value));
+}
+
+// remove() Unit Tests
+// -----------------------------------------------------------------------------
+template <typename T, typename U>
+using RemoveType = decltype(remove(T{}, U{}));
+
+TEST(ListTest, RemoveEmpty) {
+    EXPECT_TRUE((std::is_same<RemoveType<int, List<>>, List<>>::value));
+}
+
+TEST(ListTest, RemoveSingle) {
+    EXPECT_TRUE((std::is_same<RemoveType<int, List<int>>, List<>>::value));
+    EXPECT_TRUE((std::is_same<RemoveType<bool, List<int>>, List<int>>::value));
+}
+
+TEST(ListTest, RemoveMultiple) {
+    EXPECT_TRUE((std::is_same<RemoveType<int, List<int, int>>, List<>>::value));
+    EXPECT_TRUE((std::is_same<RemoveType<int, List<int, float, int>>, List<float>>::value));
+    EXPECT_TRUE((std::is_same<RemoveType<int, List<float, double>>, List<float, double>>::value));
 }
 
 // front() Unit Tests

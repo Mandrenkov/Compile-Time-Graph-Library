@@ -6,11 +6,13 @@ using namespace ctgl;
 
 // Graph Building Blocks
 // -----------------------------------------------------------------------------
+// Nodes
 using N1 = Node<1>;
 using N2 = Node<2>;
 using N3 = Node<3>;
 using N4 = Node<4>;
 
+// Edges
 using E11 = Edge<N1, N1>;
 using E12 = Edge<N1, N2>;
 using E13 = Edge<N1, N3>;

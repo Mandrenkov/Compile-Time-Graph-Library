@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <typeinfo>
 
@@ -50,17 +52,17 @@ namespace ctgl {
     // Run-Time Functions
     // -------------------------------------------------------------------------
 
-    template<typename T, typename... Ts>
-    std::ostream& operator<<(std::ostream& out, const List<T, Ts...>& list) {
+    template <typename T, typename... Ts>
+    inline std::ostream& operator<<(std::ostream& out, const List<T, Ts...>& list) {
         return out << typeid(T).name() << ' ' << List<Ts...>{};
     }
 
-    template<typename T>
-    std::ostream& operator<<(std::ostream& out, const List<T>& list) {
+    template <typename T>
+    inline std::ostream& operator<<(std::ostream& out, const List<T>& list) {
         return out << typeid(T).name();
     }
 
-    std::ostream& operator<<(std::ostream& out, const List<>& list) {
+    inline std::ostream& operator<<(std::ostream& out, const List<>& list) {
         return out;
     }
 }

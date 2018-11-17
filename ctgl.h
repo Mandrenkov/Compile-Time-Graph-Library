@@ -3,34 +3,13 @@
 #include <typeinfo>
 
 #include "list.h"
+#include "graph.h"
 
 // CTGL Constants
 // -----------------------------------------------------------------------------
 namespace ctgl {
     // Denotes an invalid distance (e.g., the distance between two disconnected nodes).
     constexpr int INVALID_DISTANCE = -1;
-}
-
-// CTGL Data Structures
-// -----------------------------------------------------------------------------
-namespace ctgl {
-    // Node represents a graph node with the given ID and edges.
-    template <int ID>
-    struct Node {
-        static constexpr int id = ID;
-    };
-
-    template<typename F, typename T>
-    struct Edge {
-        using From = F;
-        using To = T;
-    };
-
-    template <typename N, typename E>
-    struct Graph {
-        using NodeList = N;
-        using EdgeList = E;
-    };
 }
 
 // CTGL Algorithms

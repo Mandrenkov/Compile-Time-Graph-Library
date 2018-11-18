@@ -52,6 +52,7 @@ namespace ctgl {
     // Run-Time Functions
     // -------------------------------------------------------------------------
 
+    //template <typename T, typename... Ts, typename = std::enable_if_t<sizeof... (Ts) != 0>>
     template <typename T, typename... Ts>
     inline std::ostream& operator<<(std::ostream& out, const List<T, Ts...>& list) {
         return out << typeid(T).name() << ' ' << List<Ts...>{};

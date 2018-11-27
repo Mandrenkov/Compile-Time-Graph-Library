@@ -27,6 +27,17 @@ TEST(ListTest, SizeDuplicate) {
     EXPECT_EQ(size(List<int, int>{}), 2);
 }
 
+// empty() Unit Tests
+// -----------------------------------------------------------------------------
+TEST(ListTest, EmptyVacant) {
+    EXPECT_TRUE(empty(List<>{}));
+}
+
+TEST(ListTest, EmptyOccupied) {
+    EXPECT_FALSE(empty(List<int>{}));
+    EXPECT_FALSE(empty(List<int, bool>{}));
+}
+
 // link() Unit Tests
 // -----------------------------------------------------------------------------
 template <typename T, typename U>

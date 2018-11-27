@@ -13,10 +13,12 @@ namespace ctgl {
     // -------------------------------------------------------------------------
 
     // Returns the size of the given List.
-    template <typename T, typename... Ts>
-    constexpr int size(List<T, Ts...>) { return size(List<Ts...>{}) + 1; }
+    template <typename... Ts>
+    constexpr int size(List<Ts...>) { return sizeof...(Ts); }
 
-    constexpr int size(List<>) { return 0; }
+    // Returns true if the given List is empty.
+    template <typename... Ts>
+    constexpr bool empty(List<Ts...>) { return sizeof...(Ts) == 0; }
 
     // Returns a new List that is the concatenation of the given Lists.
     template <typename... Ts, typename... Us>

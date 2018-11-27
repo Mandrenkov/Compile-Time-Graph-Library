@@ -12,6 +12,12 @@ namespace ctgl {
     // Compile-Time Functions
     // -------------------------------------------------------------------------
 
+    // Returns the size of the given List.
+    template <typename T, typename... Ts>
+    constexpr int size(List<T, Ts...>) { return size(List<Ts...>{}) + 1; }
+
+    constexpr int size(List<>) { return 0; }
+
     // Returns a new List that is the concatenation of the given Lists.
     template <typename... Ts, typename... Us>
     constexpr auto link(List<Ts...>, List<Us...>) -> List<Ts..., Us...>;

@@ -9,6 +9,24 @@
 
 using namespace ctgl;
 
+// size() Unit Tests
+// -----------------------------------------------------------------------------
+TEST(ListTest, SizeEmpty) {
+    EXPECT_EQ(size(List<>{}), 0);
+}
+
+TEST(ListTest, SizeSingle) {
+    EXPECT_EQ(size(List<int>{}), 1);
+}
+
+TEST(ListTest, SizeMultiple) {
+    EXPECT_EQ(size(List<int, float, double>{}), 3);
+}
+
+TEST(ListTest, SizeDuplicate) {
+    EXPECT_EQ(size(List<int, int>{}), 2);
+}
+
 // link() Unit Tests
 // -----------------------------------------------------------------------------
 template <typename T, typename U>

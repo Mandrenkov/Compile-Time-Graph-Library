@@ -17,4 +17,4 @@ matrix:
 before_install:
     - eval "${MATRIX_EVAL}"
 
-script: make test
+script: make test COMPILER=g++-7

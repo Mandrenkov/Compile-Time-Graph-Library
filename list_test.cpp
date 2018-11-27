@@ -137,6 +137,29 @@ TEST(ListTest, ContainsNotFound) {
     EXPECT_FALSE(contains(bool{}, List<int, float, double>{}));
 }
 
+// operator==() Unit Tests
+// -----------------------------------------------------------------------------
+TEST(ListTest, EqualEmpty) {
+    EXPECT_TRUE(List<>{} == List<>{});
+}
+
+TEST(ListTest, EqualSingle) {
+    EXPECT_TRUE(List<int>{}  == List<int>{});
+    EXPECT_FALSE(List<int>{} == List<>{});
+    EXPECT_FALSE(List<>{}    == List<int>{});
+    EXPECT_FALSE(List<int>{} == List<bool>{});
+}
+
+TEST(ListTest, EqualMultiple) {
+    EXPECT_TRUE((List<int, bool>{})          == (List<int, bool>{}));
+    EXPECT_TRUE((List<int, float, double>{}) == (List<int, float, double>{}));
+    EXPECT_FALSE((List<int, bool>{})         == (List<>{}));
+    EXPECT_FALSE((List<>{})                  == (List<int, bool>{}));
+    EXPECT_FALSE((List<int, bool>{})         == (List<int>{}));
+    EXPECT_FALSE((List<int, bool>{})         == (List<bool>{}));
+    EXPECT_FALSE((List<int, bool>{})         == (List<bool, int>{}));
+}
+
 // Output Stream Unit Tests
 // -----------------------------------------------------------------------------
 TEST(ListTest, OutputStreamEmpty) {

@@ -56,6 +56,21 @@ namespace ctgl {
     template <typename T>
     constexpr bool contains(T, List<>) { return false; }
 
+    // Returns true if the given Lists are the same.
+    template <typename T, typename... Ts, typename U, typename... Us>
+    constexpr bool operator==(List<T, Ts...>, List<U, Us...>) { return false; }
+
+    template <typename T, typename... Ts, typename... Us>
+    constexpr bool operator==(List<T, Ts...>, List<T, Us...>) { return List<Ts...>{} == List<Us...>{}; }
+
+    template <typename T, typename... Ts>
+    constexpr bool operator==(List<T, Ts...>, List<>) { return false; }
+
+    template <typename U, typename... Us>
+    constexpr bool operator==(List<>, List<U, Us...>) { return false; }
+
+    constexpr bool operator==(List<>, List<>) { return true; }
+
 
     // Run-Time Functions
     // -------------------------------------------------------------------------

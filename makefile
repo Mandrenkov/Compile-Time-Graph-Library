@@ -1,4 +1,4 @@
-# Allow users to specify the C++ compiler from the command line.
+# Allow users to specify their preferred C++ compiler from the command line.
 COMPILER=g++
 
 all:
@@ -11,4 +11,3 @@ test:
 
 clean:
 	@rm -f *.exe
-

@@ -17,6 +17,10 @@ namespace ctgl {
         // to ensure that ADL can be used to resolve recursive return types.
         struct ADL {};
 
+        // Type that does not compile if |T| is different from |U|.
+        template <typename T, typename U>
+        using enable_if_same_t = std::enable_if_t<std::is_same_v<T, U>>;
+
         // Type that does not compile if |T| is the same as |U|.
         template <typename T, typename U>
         using enable_if_different_t = std::enable_if_t<!std::is_same_v<T, U>>;

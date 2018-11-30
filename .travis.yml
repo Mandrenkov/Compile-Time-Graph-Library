@@ -1,18 +1,29 @@
 language: cpp
 compiler:
-  - gcc
+    - gcc
+    - clang
 
 matrix:
-  include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    include:
+        - os: linux
+            addons:
+                apt:
+                    sources:
+                        - ubuntu-toolchain-r-test
+                    packages:
+                        - g++-7
+            env:
+                - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - os: linux
+            addons:
+                apt:
+                    sources:
+                        - llvm-toolchain-trusty-6.0
+                    packages:
+                        - clang-6.0
+                        - libstdc++6
+            env:
+                - MATRIX_EVAL="CC=clang-6.0 && CXX=clang-6.0"
 
 before_install:
     - eval "${MATRIX_EVAL}"
@@ -26,4 +37,4 @@ before_install:
     - sudo cp -a libgtest_main.so libgtest.so /usr/lib/
     - cd "${TRAVIS_BUILD_DIR}"
 
-script: make test COMPILER=g++-7
+script: make test COMPILER=$CXX

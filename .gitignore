@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Editors and IDEs
+*.code-workspace

@@ -22,6 +22,7 @@ matrix:
           packages:
             - clang-6.0
             - libstdc++6
+            - libc++abi-dev
       env:
         - MATRIX_EVAL="CC=clang-6.0 && CXX=clang-6.0"
 

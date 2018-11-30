@@ -24,6 +24,7 @@ matrix:
             - libstdc++6
       env:
         - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
+        - FLAGS="-stdlib=libc++"
 
 before_install:
   - eval "${MATRIX_EVAL}"
@@ -37,4 +38,4 @@ before_install:
   - sudo cp -a libgtest_main.so libgtest.so /usr/lib/
   - cd "${TRAVIS_BUILD_DIR}"
 
-script: make test COMPILER=${CXX}
+script: make test COMPILER=${CXX} FLAGS=${FLAGS}

@@ -1,40 +1,40 @@
 language: cpp
 compiler:
-    - gcc
-    - clang
+  - gcc
+  - clang
 
 matrix:
-    include:
-        - os: linux
-            addons:
-                apt:
-                    sources:
-                        - ubuntu-toolchain-r-test
-                    packages:
-                        - g++-7
-            env:
-                - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-        - os: linux
-            addons:
-                apt:
-                    sources:
-                        - llvm-toolchain-trusty-6.0
-                    packages:
-                        - clang-6.0
-                        - libstdc++6
-            env:
-                - MATRIX_EVAL="CC=clang-6.0 && CXX=clang-6.0"
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-6.0
+          packages:
+            - clang-6.0
+            - libstdc++6
+      env:
+        - MATRIX_EVAL="CC=clang-6.0 && CXX=clang-6.0"
 
 before_install:
-    - eval "${MATRIX_EVAL}"
-    - sudo apt-get install -y libgtest-dev cmake
-    - sudo wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz
-    - sudo tar xf release-1.7.0.tar.gz
-    - cd googletest-release-1.7.0
-    - sudo cmake -DBUILD_SHARED_LIBS=ON .
-    - sudo make
-    - sudo cp -a include/gtest /usr/include
-    - sudo cp -a libgtest_main.so libgtest.so /usr/lib/
-    - cd "${TRAVIS_BUILD_DIR}"
+  - eval "${MATRIX_EVAL}"
+  - sudo apt-get install -y libgtest-dev cmake
+  - sudo wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz
+  - sudo tar xf release-1.7.0.tar.gz
+  - cd googletest-release-1.7.0
+  - sudo cmake -DBUILD_SHARED_LIBS=ON .
+  - sudo make
+  - sudo cp -a include/gtest /usr/include
+  - sudo cp -a libgtest_main.so libgtest.so /usr/lib/
+  - cd "${TRAVIS_BUILD_DIR}"
 
 script: make test COMPILER=$CXX

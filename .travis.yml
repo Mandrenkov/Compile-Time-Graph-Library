@@ -1,7 +1,4 @@
 language: cpp
-compiler:
-  - gcc
-  - clang
 
 matrix:
   include:
@@ -40,4 +37,4 @@ before_install:
   - sudo cp -a libgtest_main.so libgtest.so /usr/lib/
   - cd "${TRAVIS_BUILD_DIR}"
 
-script: make test COMPILER=$CXX
+script: make test COMPILER=${CXX}

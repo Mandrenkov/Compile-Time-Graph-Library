@@ -1,6 +1,7 @@
 language: cpp
 
 matrix:
+  # GCC 7
   include:
     - os: linux
       addons:
@@ -9,8 +10,10 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+      env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+      compiler: gcc
+
+    # Clang 6.0
     - os: linux
       addons:
         apt:
@@ -23,9 +26,10 @@ matrix:
             - clang-6.0
             - libstdc++6
             - g++-7
-      env:
-        - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
+      env: MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
+      compiler: clang
 
+# Install Google Test
 before_install:
   - eval "${MATRIX_EVAL}"
   - sudo apt-get install -y libgtest-dev cmake
@@ -38,4 +42,4 @@ before_install:
   - sudo cp -a libgtest_main.so libgtest.so /usr/lib/
   - cd "${TRAVIS_BUILD_DIR}"
 
-script: make test COMPILER=${CXX} FLAGS=${FLAGS}
+script: make test COMPILER=${CXX}

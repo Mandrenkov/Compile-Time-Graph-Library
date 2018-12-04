@@ -1,25 +1,40 @@
-# Allow users to specify their preferred C++ compiler from the command line. 
+# Flags
+# ------------------------------------------------------------------------------
+# Allow users to specify their preferred C++ compiler.
 COMPILER=g++
-FLAGS=
+# Allow users to specify custom compiler flags.
+FLAGS=-O2
 
-CPP_DIR="./src/cpp"
-TEST_DIR="./src/test"
 
-MAIN_EXE="ctgl.exe"
-TEST_EXE="ctgl_test.exe"
+# Paths
+# ------------------------------------------------------------------------------
+# Directories
+BIN_DIR=./bin
+CPP_DIR=./src/cpp
+TEST_DIR=./src/test
 
+# Executables
+MAIN_EXE=$(BIN_DIR)/ctgl.exe
+TEST_EXE=$(BIN_DIR)/ctgl_test.exe
+
+# Files
+TEST_FILES=$(wildcard $(TEST_DIR)/*_test.cpp)
+
+
+# Rules
+# ------------------------------------------------------------------------------
 all: bin
-	@rm -f ./bin/$(MAIN_EXE)
-	@$(COMPILER) $(FLAGS) -std=c++17 -Wfatal-errors -O2 -o bin/$(MAIN_EXE) $(CPP_DIR)/ctgl.cpp
-	@./bin/$(MAIN_EXE)
+	@rm -f $(MAIN_EXE)
+	@$(COMPILER) $(FLAGS) -std=c++17 -Wfatal-errors -o $(MAIN_EXE) $(CPP_DIR)/ctgl.cpp
+	@$(MAIN_EXE)
 
 test: bin
-	@rm -f ./bin/$(TEST_EXE)
-	@$(COMPILER) $(FLAGS) -std=c++17 -Wfatal-errors -O2 -o bin/$(TEST_EXE) $(TEST_DIR)/list_test.cpp $(TEST_DIR)/graph_test.cpp $(TEST_DIR)/algorithm_test.cpp -lgtest -lgtest_main
-	@./bin/$(TEST_EXE)
+	@rm -f $(TEST_EXE)
+	@$(COMPILER) $(FLAGS) -std=c++17 -Wfatal-errors -o $(TEST_EXE) $(TEST_FILES) -lgtest -lgtest_main
+	@$(TEST_EXE)
 
 bin:
-	@mkdir -p ./bin
+	@mkdir -p $(BIN_DIR)
 
 clean:
-	@rm -f ./bin
+	@rm -f $(BIN_DIR)

@@ -9,181 +9,151 @@
 
 using namespace ctgl;
 
-// size() Unit Tests
-// -----------------------------------------------------------------------------
-TEST(ListTest, SizeEmpty) {
-    EXPECT_EQ(size(List<>{}), 0);
-}
 
-TEST(ListTest, SizeSingle) {
-    EXPECT_EQ(size(List<int>{}), 1);
-}
-
-TEST(ListTest, SizeMultiple) {
-    EXPECT_EQ(size(List<int, float, double>{}), 3);
-}
-
-TEST(ListTest, SizeDuplicate) {
-    EXPECT_EQ(size(List<int, int>{}), 2);
-}
-
-// empty() Unit Tests
-// -----------------------------------------------------------------------------
-TEST(ListTest, EmptyVacant) {
-    EXPECT_TRUE(empty(List<>{}));
-}
-
-TEST(ListTest, EmptyOccupied) {
-    EXPECT_FALSE(empty(List<int>{}));
-    EXPECT_FALSE(empty(List<int, bool>{}));
-}
-
-// link() Unit Tests
+// Convenient Type Aliases
 // -----------------------------------------------------------------------------
 template <typename T, typename U>
 using LinkType = decltype(link(T{}, U{}));
 
-TEST(ListTest, LinkEmpty) {
-    EXPECT_TRUE((std::is_same<LinkType<List<>, List<>>, List<>>::value));
+template <typename T, typename U>
+using PushType = decltype(push(T{}, U{}));
+
+template <typename T>
+using PopType = decltype(pop(T{}));
+
+template <typename T, typename U>
+using RemoveType = decltype(remove(T{}, U{}));
+
+template <typename T>
+using FrontType = decltype(front(T{}));
+
+
+// Unit Tests
+// -----------------------------------------------------------------------------
+// Tests for the size() function.
+TEST(ListTest, Size) {
+    EXPECT_EQ(size(List<>{}), 0);
+    EXPECT_EQ(size(List<int>{}), 1);
+    EXPECT_EQ(size(List<int, float, double>{}), 3);
+    EXPECT_EQ(size(List<int, int>{}), 2);
 }
 
-TEST(ListTest, LinkSingle) {
+// Tests for the empty() function.
+TEST(ListTest, Empty) {
+    EXPECT_TRUE(empty(List<>{}));
+    EXPECT_FALSE(empty(List<int>{}));
+    EXPECT_FALSE(empty(List<int, bool>{}));
+}
+
+// Tests for the link() function.
+TEST(ListTest, Link) {
+    // Empty
+    EXPECT_TRUE((std::is_same<LinkType<List<>, List<>>, List<>>::value));
+
+    // Single
     EXPECT_TRUE((std::is_same<LinkType<List<>, List<int>>, List<int>>::value));
     EXPECT_TRUE((std::is_same<LinkType<List<int>, List<>>, List<int>>::value));
-}
 
-TEST(ListTest, LinkBoth) {
+    // Multiple
     EXPECT_TRUE((std::is_same<LinkType<List<int>, List<int>>, List<int, int>>::value));
     EXPECT_TRUE((std::is_same<LinkType<List<int>, List<float>>, List<int, float>>::value));
     EXPECT_TRUE((std::is_same<LinkType<List<int, bool>, List<float, double>>, List<int, bool, float, double>>::value));
 }
 
-// push() Unit Tests
-// -----------------------------------------------------------------------------
-template <typename T, typename U>
-using PushType = decltype(push(T{}, U{}));
-
-TEST(ListTest, PushEmpty) {
+// Tests for the push() function.
+TEST(ListTest, Push) {
     EXPECT_TRUE((std::is_same<PushType<int, List<>>, List<int>>::value));
-}
-
-TEST(ListTest, PushSingle) {
     EXPECT_TRUE((std::is_same<PushType<int, List<bool>>, List<int, bool>>::value));
+    EXPECT_TRUE((std::is_same<PushType<int, List<float, double>>, List<int, float, double>>::value));
 }
 
-TEST(ListTest, PushMultiple) {
-   EXPECT_TRUE((std::is_same<PushType<int, List<float, double>>, List<int, float, double>>::value));
-}
-
-// pop() Unit Tests
-// -----------------------------------------------------------------------------
-template <typename T>
-using PopType = decltype(pop(T{}));
-
-TEST(ListTest, PopSingle) {
+// Tests for the pop() function.
+TEST(ListTest, Pop) {
     EXPECT_TRUE((std::is_same<PopType<List<int>>, List<>>::value));
-}
-
-TEST(ListTest, PopMultiple) {
     EXPECT_TRUE((std::is_same<PopType<List<int, float, double>>, List<float, double>>::value));
 }
 
-// remove() Unit Tests
-// -----------------------------------------------------------------------------
-template <typename T, typename U>
-using RemoveType = decltype(remove(T{}, U{}));
-
-TEST(ListTest, RemoveEmpty) {
+// Tests for the remove() function.
+TEST(ListTest, Remove) {
+    // Empty
     EXPECT_TRUE((std::is_same<RemoveType<int, List<>>, List<>>::value));
-}
 
-TEST(ListTest, RemoveSingle) {
+    // Single
     EXPECT_TRUE((std::is_same<RemoveType<int, List<int>>, List<>>::value));
     EXPECT_TRUE((std::is_same<RemoveType<bool, List<int>>, List<int>>::value));
-}
 
-TEST(ListTest, RemoveMultiple) {
+    // Multiple
     EXPECT_TRUE((std::is_same<RemoveType<int, List<int, int>>, List<>>::value));
     EXPECT_TRUE((std::is_same<RemoveType<int, List<int, float, int>>, List<float>>::value));
     EXPECT_TRUE((std::is_same<RemoveType<int, List<float, double>>, List<float, double>>::value));
 }
 
-// front() Unit Tests
-// -----------------------------------------------------------------------------
-template <typename T>
-using FrontType = decltype(front(T{}));
-
-TEST(ListTest, FrontSingle) {
+// Tests for the front() function.
+TEST(ListTest, Front) {
     EXPECT_TRUE((std::is_same<FrontType<List<int>>, int>::value));
-}
-
-TEST(ListTest, FrontMultiple) {
     EXPECT_TRUE((std::is_same<FrontType<List<int, float, double>>, int>::value));
 }
 
-// contains() Unit Tests
-// -----------------------------------------------------------------------------
+// Tests for the contains() function.
 TEST(ListTest, ContainsEmpty) {
+    // Empty
     EXPECT_FALSE(contains(int{}, List<>{}));
-}
 
-TEST(ListTest, ContainsFound) {
+    // Found
     EXPECT_TRUE(contains(int{}, List<int>{}));
     EXPECT_TRUE(contains(bool{}, List<int, bool>{}));
-}
 
-TEST(ListTest, ContainsNotFound) {
+    // Not Found
     EXPECT_FALSE(contains(int{}, List<float>{}));
     EXPECT_FALSE(contains(bool{}, List<int, float, double>{}));
 }
 
-// operator==() Unit Tests
-// -----------------------------------------------------------------------------
+// Tests for the "==" operator.
 TEST(ListTest, EqualEmpty) {
+    // Empty
     EXPECT_TRUE(List<>{} == List<>{});
-}
 
-TEST(ListTest, EqualSingle) {
+    // Single
     EXPECT_TRUE(List<int>{}  == List<int>{});
     EXPECT_FALSE(List<int>{} == List<>{});
     EXPECT_FALSE(List<>{}    == List<int>{});
     EXPECT_FALSE(List<int>{} == List<bool>{});
-}
 
-TEST(ListTest, EqualMultiple) {
-    EXPECT_TRUE((List<int, bool>{})          == (List<int, bool>{}));
+    // Multiple
+    EXPECT_TRUE((List<int, bool>{}) == (List<int, bool>{}));
     EXPECT_TRUE((List<int, float, double>{}) == (List<int, float, double>{}));
-    EXPECT_FALSE((List<int, bool>{})         == (List<>{}));
-    EXPECT_FALSE((List<>{})                  == (List<int, bool>{}));
-    EXPECT_FALSE((List<int, bool>{})         == (List<int>{}));
-    EXPECT_FALSE((List<int, bool>{})         == (List<bool>{}));
-    EXPECT_FALSE((List<int, bool>{})         == (List<bool, int>{}));
+    EXPECT_FALSE((List<int, bool>{}) == (List<>{}));
+    EXPECT_FALSE((List<>{}) == (List<int, bool>{}));
+    EXPECT_FALSE((List<int, bool>{}) == (List<int>{}));
+    EXPECT_FALSE((List<int, bool>{}) == (List<bool>{}));
+    EXPECT_FALSE((List<int, bool>{}) == (List<bool, int>{}));
 }
 
-// Output Stream Unit Tests
-// -----------------------------------------------------------------------------
-TEST(ListTest, OutputStreamEmpty) {
-    std::ostringstream stream;
-    stream << List<>{};
-    const std::string have = stream.str();
-    const std::string want = "";
-    EXPECT_EQ(want, have);
-}
+// Tests for the "<<" operator.
+TEST(ListTest, OutputStream) {
+    {   // Empty
+        std::ostringstream stream;
+        stream << List<>{};
+        const std::string have = stream.str();
+        const std::string want = "";
+        EXPECT_EQ(want, have);
+    }
 
-TEST(ListTest, OutputStreamSingle) {
-    std::ostringstream stream;
-    stream << List<int>{};
-    const std::string have = stream.str();
-    const std::string want = typeid(int).name();
-    EXPECT_EQ(want, have);
-}
+    {   // Single
+        std::ostringstream stream;
+        stream << List<int>{};
+        const std::string have = stream.str();
+        const std::string want = typeid(int).name();
+        EXPECT_EQ(want, have);
+    }
 
-TEST(ListTest, OutputStreamMultiple) {
-    std::ostringstream stream;
-    stream << List<int, float>{};
-    const std::string have = stream.str();
-    const std::string i_name = typeid(int).name();
-    const std::string f_name = typeid(float).name();
-    const std::string want = i_name + " " + f_name;
-    EXPECT_EQ(want, have);
+    {   // Multiple
+        std::ostringstream stream;
+        stream << List<int, float>{};
+        const std::string have = stream.str();
+        const std::string i_name = typeid(int).name();
+        const std::string f_name = typeid(float).name();
+        const std::string want = i_name + " " + f_name;
+        EXPECT_EQ(want, have);
+    }
 }

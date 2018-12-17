@@ -9,14 +9,6 @@ namespace ctgl {
     constexpr int INF = std::numeric_limits<int>::max();
 }
 
-// CTGL Data Structures
-// -----------------------------------------------------------------------------
-namespace ctgl {
-    template<typename... Ts>
-    using List = ctgl::list::List<Ts...>;
-}
-
-
 // CTGL Global Types
 // -----------------------------------------------------------------------------
 namespace ctgl {

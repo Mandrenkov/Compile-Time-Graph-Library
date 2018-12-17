@@ -13,7 +13,7 @@ namespace ctgl {
         template <typename G, typename S, typename T, typename N, typename... Ns, typename = enable_if_different_t<S, T>>
         constexpr int distance(ADL, G, S, T, List<N, Ns...>) {
             constexpr int skip = distance(ADL{}, G{}, S{}, T{}, List<Ns...>{});
-            constexpr int branch = distance(ADL{}, G{}, N{}, T{}, decltype(adjacent(G{}, N{})){});
+            constexpr int branch = distance(ADL{}, G{}, N{}, T{}, decltype(ctgl::graph::adjacent(G{}, N{})){});
             return branch == INF ? skip : std::min(skip, branch + 1);
         }
 
@@ -26,7 +26,7 @@ namespace ctgl {
     template <typename G, typename S, typename T>
     constexpr int distance(G, S, T) {
         constexpr bool feasible = list::contains(S{}, typename G::Nodes{}) && list::contains(T{}, typename G::Nodes{});
-        return feasible ? detail::distance(detail::ADL{}, G{}, S{}, T{}, decltype(adjacent(G{}, S{})){}) : INF;
+        return feasible ? detail::distance(detail::ADL{}, G{}, S{}, T{}, decltype(ctgl::graph::adjacent(G{}, S{})){}) : INF;
     }
 
     // Implementation of path().
@@ -39,7 +39,7 @@ namespace ctgl {
         template <typename G, typename S, typename T, typename N, typename... Ns, typename = enable_if_different_t<S, T>>
         constexpr auto path(ADL, G, S, T, List<N, Ns...>) {
             constexpr auto skip = path(ADL{}, G{}, S{}, T{}, List<Ns...>{});
-            constexpr auto branch = path(ADL{}, G{}, N{}, T{}, decltype(adjacent(G{}, N{})){});
+            constexpr auto branch = path(ADL{}, G{}, N{}, T{}, decltype(ctgl::graph::adjacent(G{}, N{})){});
 
             if constexpr (empty(skip) && empty(branch)) {
                 return List<>{};
@@ -67,7 +67,7 @@ namespace ctgl {
         if constexpr (!feasible) {
             return List<>{};
         } else {
-            constexpr auto next = decltype(adjacent(G{}, S{})){};
+            constexpr auto next = decltype(ctgl::graph::adjacent(G{}, S{})){};
             return detail::path(detail::ADL{}, G{}, S{}, T{}, next);
         }
     }

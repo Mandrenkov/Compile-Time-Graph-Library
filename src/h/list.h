@@ -82,4 +82,9 @@ namespace ctgl {
             return out;
         }
     }
+
+    // Convenient Type Definitions
+    // -------------------------------------------------------------------------
+    template<typename... Ts>
+    using List = ctgl::list::List<Ts...>;
 }

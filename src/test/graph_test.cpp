@@ -2,6 +2,7 @@
 
 #include "../h/graph.h"
 
+
 using namespace ctgl;
 
 // Graph Building Blocks
@@ -36,7 +37,7 @@ using E44 = Edge<N4, N4>;
 // adjacent() Unit Tests
 // -----------------------------------------------------------------------------
 template <typename T, typename U>
-using AdjacentType = decltype(adjacent(T{}, U{}));
+using AdjacentType = decltype(ctgl::graph::adjacent(T{}, U{}));
 
 TEST(GraphTest, AdjacentEmpty) {
     using G = Graph<List<>, List<>>;

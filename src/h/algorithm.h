@@ -25,7 +25,7 @@ namespace ctgl {
 
     template <typename G, typename S, typename T>
     constexpr int distance(G, S, T) {
-        constexpr bool feasible = contains(S{}, typename G::Nodes{}) && contains(T{}, typename G::Nodes{});
+        constexpr bool feasible = list::contains(S{}, typename G::Nodes{}) && list::contains(T{}, typename G::Nodes{});
         return feasible ? detail::distance(detail::ADL{}, G{}, S{}, T{}, decltype(adjacent(G{}, S{})){}) : INF;
     }
 
@@ -63,7 +63,7 @@ namespace ctgl {
     template <typename G, typename S, typename T>
     constexpr auto path(G, S, T) {
         constexpr auto nodes = typename G::Nodes{};
-        constexpr bool feasible = contains(S{}, nodes) && contains(T{}, nodes);
+        constexpr bool feasible = list::contains(S{}, nodes) && list::contains(T{}, nodes);
         if constexpr (!feasible) {
             return List<>{};
         } else {

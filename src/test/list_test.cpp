@@ -7,7 +7,7 @@
 #include "../h/list.h"
 
 
-using namespace ctgl;
+using namespace ctgl::list;
 
 // size() Unit Tests
 // -----------------------------------------------------------------------------

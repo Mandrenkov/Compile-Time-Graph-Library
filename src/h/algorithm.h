@@ -18,17 +18,22 @@ namespace ctgl {
         template <typename G, typename S, typename T, typename N, typename... Ns, typename = enable_if_different_t<S, T>>
         constexpr auto path(ADL, G, S, T, List<N, Ns...>) {
             constexpr auto skip = path(ADL{}, G{}, S{}, T{}, List<Ns...>{});
-            constexpr auto branch = path(ADL{}, G{}, N{}, T{}, decltype(ctgl::graph::adjacent(G{}, N{})){});
+            constexpr auto branch = path(ADL{}, G{}, N{}, T{}, decltype(graph::adjacent(G{}, N{})){});
 
-            if constexpr (empty(skip) && empty(branch)) {
+            if constexpr (list::empty(skip) && list::empty(branch)) {
+                // Node |T| is not reachable from Node |S|.
                 return List<>{};
-            } else if constexpr (empty(skip)) {
+            } else if constexpr (list::empty(skip)) {
+                // Node |T| is transitively connected to Node |S| through Node |N|.
                 return decltype(push(S{}, branch)){};
-            } else if constexpr (empty(branch)) {
+            } else if constexpr (list::empty(branch)) {
+                // Node |T| is transivitely connected to Node |S| through a Node in |Ns|.
                 return skip;
-            } else if constexpr (size(skip) > size(branch)) {
-                return decltype(push(S{}, branch)){};
+            } else if constexpr (list::size(skip) > list::size(branch)) {
+                // The shortest path to Node |T| from Node |S| is through Node |N|.
+                return decltype(list::push(S{}, branch)){};
             } else {
+                // The shortest path to Node |T| from Node |S| is through a Node in |Ns|.
                 return skip;
             }
         }
@@ -52,7 +57,7 @@ namespace ctgl {
             return List<>{};
         } else {
             // The Graph contains both Node |S| and Node |T|.
-            return detail::path(detail::ADL{}, G{}, S{}, T{}, decltype(ctgl::graph::adjacent(G{}, S{})){});
+            return detail::path(detail::ADL{}, G{}, S{}, T{}, decltype(graph::adjacent(G{}, S{})){});
         }
     }
 
@@ -62,7 +67,7 @@ namespace ctgl {
     // If there is no path from |S| to |T|, INF is returned.
     template <typename G, typename S, typename T>
     constexpr int distance(G, S, T) {
-        constexpr auto size = ctgl::list::size(ctgl::path(G{}, S{}, T{}));
+        constexpr auto size = list::size(ctgl::path(G{}, S{}, T{}));
         return size == 0 ? ctgl::INF : size - 1;
     }
 }

@@ -95,7 +95,7 @@ TEST(ListTest, Front) {
 }
 
 // Tests for the contains() function.
-TEST(ListTest, ContainsEmpty) {
+TEST(ListTest, Contains) {
     // Empty
     EXPECT_FALSE(contains(int{}, List<>{}));
 
@@ -109,7 +109,7 @@ TEST(ListTest, ContainsEmpty) {
 }
 
 // Tests for the "==" operator.
-TEST(ListTest, EqualEmpty) {
+TEST(ListTest, Equals) {
     // Empty
     EXPECT_TRUE(List<>{} == List<>{});
 

@@ -11,6 +11,9 @@ using namespace ctgl;
 template <typename T, typename U>
 using AdjacentType = decltype(ctgl::graph::adjacent(T{}, U{}));
 
+template <typename G, typename N>
+using ConnectedType = decltype(ctgl::graph::connected(G{}, N{}));
+
 
 // Unit Tests
 // -----------------------------------------------------------------------------
@@ -38,4 +41,23 @@ TEST(GraphTest, Adjacent) {
     EXPECT_TRUE((std::is_same<AdjacentType<forge::Leap, forge::N1>, List<forge::N2, forge::N3>>::value));
     EXPECT_TRUE((std::is_same<AdjacentType<forge::Leap, forge::N2>, List<forge::N3>>::value));
     EXPECT_TRUE((std::is_same<AdjacentType<forge::Leap, forge::N3>, List<>>::value));
+}
+
+// Tests for the connected() function.
+TEST(GraphTest, Connected) {
+    // Empty
+    EXPECT_TRUE((std::is_same<ConnectedType<forge::Empty, forge::N1>, List<>>::value));
+
+    // Island
+    EXPECT_TRUE((std::is_same<ConnectedType<forge::Island, forge::N1>, List<forge::N1>>::value));
+    EXPECT_TRUE((std::is_same<ConnectedType<forge::Island, forge::N2>, List<>>::value));
+
+    // Loopback
+    EXPECT_TRUE((std::is_same<ConnectedType<forge::Loopback, forge::N1>, List<forge::N1>>::value));
+
+    // Pan
+    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N1>, List<forge::N1, forge::N4, forge::N2, forge::N3>>::value));
+    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N2>, List<           forge::N2, forge::N3           >>::value));
+    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N3>, List<                      forge::N3           >>::value));
+    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N4>, List<forge::N4, forge::N2, forge::N3>>::value));
 }

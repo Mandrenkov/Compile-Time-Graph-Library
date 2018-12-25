@@ -29,7 +29,7 @@ namespace ctgl {
         // Compile-Time Functions
         // -------------------------------------------------------------------------
 
-        // Returns a List of Nodes in the |G| Graph that are adjacent to the |N| Node.
+        // Returns the Nodes in the Graph |G| that are adjacent to Node |N|.
         template <typename N>
         constexpr auto adjacent(N, List<>) -> decltype(List<>{});
 
@@ -41,6 +41,29 @@ namespace ctgl {
 
         template <typename G, typename N>
         constexpr auto adjacent(G, N) -> decltype(adjacent(N{}, typename G::Edges{}));
+        
+
+        // Returns the Nodes in the Graph |G| that are connected to Node |N|.
+        template <typename G, typename N>
+        constexpr auto connected(G, N, List<>) -> decltype(List<>{});
+
+        template <typename G, typename N, typename... Ts>
+        constexpr auto connected(G, N, List<N, Ts...>) -> decltype(connected(G{}, N{}, List<Ts...>{}));
+
+        template <typename G, typename N, typename T, typename... Ts, typename = ctgl::detail::enable_if_different_t<N, T>>
+        constexpr auto connected(G, N, List<T, Ts...>) -> decltype(list::push(T{}, list::link(connected(G{}, N{}, List<Ts...>{}), connected(G{}, T{}, adjacent(G{}, T{})))));
+
+        template <typename G, typename N>
+        constexpr auto connected(G, N) {
+            constexpr bool feasible = list::contains(N{}, typename G::Nodes{});
+            if constexpr (!feasible) {
+                // The Graph does not contain Node |N|.
+                return List<>{};
+            } else {
+                // The Graph contains Node |N|.
+                return decltype(list::unique(list::push(N{}, connected(G{}, N{}, adjacent(G{}, N{}))))){};
+            }
+        }
     }
 
     // Convenient Type Definitions

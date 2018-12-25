@@ -3,39 +3,18 @@
 #include "utility.h"
 
 namespace ctgl {
-    // Implementation of distance().
-    namespace detail {
-        template <typename G, typename S, typename... Ns>
-        constexpr int distance(ADL, G, S, S, List<Ns...>) {
-            return 0;
-        }
-
-        template <typename G, typename S, typename T, typename N, typename... Ns, typename = enable_if_different_t<S, T>>
-        constexpr int distance(ADL, G, S, T, List<N, Ns...>) {
-            constexpr int skip = distance(ADL{}, G{}, S{}, T{}, List<Ns...>{});
-            constexpr int branch = distance(ADL{}, G{}, N{}, T{}, decltype(ctgl::graph::adjacent(G{}, N{})){});
-            return branch == INF ? skip : std::min(skip, branch + 1);
-        }
-
-        template <typename G, typename S, typename T, typename = enable_if_different_t<S, T>>
-        constexpr int distance(ADL, G, S, T, List<>) {
-            return INF;
-        }
-    }
-
-    template <typename G, typename S, typename T>
-    constexpr int distance(G, S, T) {
-        constexpr bool feasible = list::contains(S{}, typename G::Nodes{}) && list::contains(T{}, typename G::Nodes{});
-        return feasible ? detail::distance(detail::ADL{}, G{}, S{}, T{}, decltype(ctgl::graph::adjacent(G{}, S{})){}) : INF;
-    }
-
     // Implementation of path().
+    // -------------------------------------------------------------------------
     namespace detail {
+        // [Template Specialization] The source Node |S| is the same as the target
+        // Node |T|.
         template <typename G, typename S, typename... Ns>
         constexpr auto path(ADL, G, S, S, List<Ns...>) {
             return List<S>{};
         }
 
+        // [Template Specialization] The source Node |S| differs from the target
+        // Node |T| and there is at least one Edge from |S| that has yet to be traversed.
         template <typename G, typename S, typename T, typename N, typename... Ns, typename = enable_if_different_t<S, T>>
         constexpr auto path(ADL, G, S, T, List<N, Ns...>) {
             constexpr auto skip = path(ADL{}, G{}, S{}, T{}, List<Ns...>{});
@@ -54,21 +33,36 @@ namespace ctgl {
             }
         }
 
+        // [Template Specialization] The source Node |S| differs from the target
+        // Node |T| and all Edges from |S| have been traversed.
         template <typename G, typename S, typename T, typename = enable_if_different_t<S, T>>
         constexpr auto path(ADL, G, S, T, List<>) {
             return List<>{};
         }
     }
 
+    // Returns the shortest path between Node |S| and Node |T| in the |G| Graph.
+    // If there is no path from |S| to |T|, an empty List is returned.
     template <typename G, typename S, typename T>
     constexpr auto path(G, S, T) {
         constexpr auto nodes = typename G::Nodes{};
         constexpr bool feasible = list::contains(S{}, nodes) && list::contains(T{}, nodes);
         if constexpr (!feasible) {
+            // The Graph is missing Node |S| or Node |T|.
             return List<>{};
         } else {
-            constexpr auto next = decltype(ctgl::graph::adjacent(G{}, S{})){};
-            return detail::path(detail::ADL{}, G{}, S{}, T{}, next);
+            // The Graph contains both Node |S| and Node |T|.
+            return detail::path(detail::ADL{}, G{}, S{}, T{}, decltype(ctgl::graph::adjacent(G{}, S{})){});
         }
+    }
+
+    // Implementation of distance().
+    // -------------------------------------------------------------------------
+    // Returns the shortest distance between Node |S| and Node |T| in the Graph |G|.
+    // If there is no path from |S| to |T|, INF is returned.
+    template <typename G, typename S, typename T>
+    constexpr int distance(G, S, T) {
+        constexpr auto size = ctgl::list::size(ctgl::path(G{}, S{}, T{}));
+        return size == 0 ? ctgl::INF : size - 1;
     }
 }

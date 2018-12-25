@@ -56,6 +56,21 @@ namespace ctgl {
         template <typename T>
         constexpr bool contains(T, List<>) { return false; }
 
+        // Returns a new List that is constructed by removing all duplicate types in the given List.
+        template <typename T, typename... Ts>
+        constexpr auto unique(List<T, Ts...>) {
+            constexpr bool found = contains(T{}, List<Ts...>{});
+            if constexpr (found) {
+                // Type |T| exists in the tail |Ts|.
+                return unique(List<Ts...>{});
+            } else {
+                // Type |T| does not exist in the tail |Ts|.
+                return decltype(push(T{}, unique(List<Ts...>{}))){};
+            }
+        }
+
+        constexpr auto unique(List<>) { return List<>{}; }
+
         // Returns true if the given Lists are the same.
         template <typename... Ts>
         constexpr bool operator==(List<Ts...>, List<Ts...>) { return true; }

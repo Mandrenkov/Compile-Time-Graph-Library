@@ -27,6 +27,9 @@ using RemoveType = decltype(remove(T{}, U{}));
 template <typename T>
 using FrontType = decltype(front(T{}));
 
+template <typename T>
+using UniqueType = decltype(unique(T{}));
+
 
 // Unit Tests
 // -----------------------------------------------------------------------------
@@ -106,6 +109,21 @@ TEST(ListTest, Contains) {
     // Not Found
     EXPECT_FALSE(contains(int{}, List<float>{}));
     EXPECT_FALSE(contains(bool{}, List<int, float, double>{}));
+}
+
+// Tests for the unique() function.
+TEST(ListTest, Unique) {
+    // Empty
+    EXPECT_TRUE((std::is_same<UniqueType<List<>>, List<>>::value));
+
+    // Identity
+    EXPECT_TRUE((std::is_same<UniqueType<List<int>>, List<int>>::value));
+    EXPECT_TRUE((std::is_same<UniqueType<List<int, double>>, List<int, double>>::value));
+
+    // Duplicates
+    EXPECT_TRUE((std::is_same<UniqueType<List<int, int>>, List<int>>::value));
+    EXPECT_TRUE((std::is_same<UniqueType<List<int, bool, int>>, List<bool, int>>::value));
+    EXPECT_TRUE((std::is_same<UniqueType<List<bool, int, bool, int>>, List<bool, int>>::value));
 }
 
 // Tests for the "==" operator.

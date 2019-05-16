@@ -1,15 +1,10 @@
 ## Source Repository Guide
 
-### `cpp`
-
-The `cpp` directory implements the example in the root README.
+The `cpp` directory implements the example from the root README.
 
 | File                         | Contents                            |
 |---                           |---                                  |
 | [ctgl.cpp](cpp/ctgl.cpp)     | Example from the root README.       |
-
-
-### `h`
 
 The `h` directory implements the CTGL.
 
@@ -20,8 +15,6 @@ The `h` directory implements the CTGL.
 | [graph.h](h/graph.h)         | `Graph` data structure definitions. |
 | [list.h](h/list.h)           | `List` data structure definitions.  |
 | [utility.h](h/utility.h)     | Constants and template utilities.   |
-
-### `test`
 
 The `test` directory contains unit tests for the CTGL.
 

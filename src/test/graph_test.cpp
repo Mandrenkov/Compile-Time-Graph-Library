@@ -8,8 +8,8 @@ using namespace ctgl;
 
 // Convenient Type Aliases
 // -----------------------------------------------------------------------------
-template <typename T, typename U>
-using AdjacentType = decltype(ctgl::graph::adjacent(T{}, U{}));
+template <typename G, typename N>
+using AdjacentType = decltype(ctgl::graph::adjacent(G{}, N{}));
 
 template <typename G, typename N>
 using ConnectedType = decltype(ctgl::graph::connected(G{}, N{}));

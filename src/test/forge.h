@@ -12,25 +12,25 @@ namespace forge {
 
     // Edges
     // -------------------------------------------------------------------------
-    using E11 = Edge<N1, N1>;
-    using E12 = Edge<N1, N2>;
-    using E13 = Edge<N1, N3>;
-    using E14 = Edge<N1, N4>;
+    using E11 = Edge<N1, N1, 1>;
+    using E12 = Edge<N1, N2, 2>;
+    using E13 = Edge<N1, N3, 3>;
+    using E14 = Edge<N1, N4, 4>;
 
-    using E21 = Edge<N2, N1>;
-    using E22 = Edge<N2, N2>;
-    using E23 = Edge<N2, N3>;
-    using E24 = Edge<N2, N4>;
+    using E21 = Edge<N2, N1, 4>;
+    using E22 = Edge<N2, N2, 1>;
+    using E23 = Edge<N2, N3, 2>;
+    using E24 = Edge<N2, N4, 3>;
 
-    using E31 = Edge<N3, N1>;
-    using E32 = Edge<N3, N2>;
-    using E33 = Edge<N3, N3>;
-    using E34 = Edge<N3, N4>;
+    using E31 = Edge<N3, N1, 3>;
+    using E32 = Edge<N3, N2, 4>;
+    using E33 = Edge<N3, N3, 1>;
+    using E34 = Edge<N3, N4, 2>;
 
-    using E41 = Edge<N4, N1>;
-    using E42 = Edge<N4, N2>;
-    using E43 = Edge<N4, N3>;
-    using E44 = Edge<N4, N4>;
+    using E41 = Edge<N4, N1, 2>;
+    using E42 = Edge<N4, N2, 3>;
+    using E43 = Edge<N4, N3, 4>;
+    using E44 = Edge<N4, N4, 1>;
 
     // Graphs
     // -------------------------------------------------------------------------

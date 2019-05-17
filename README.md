@@ -26,10 +26,10 @@ constexpr int dist = ctgl::distance(graph{}, n1{}, n3{});
 ```
 
 ## Build Instructions
-| Command      | Objective                          |
-|---           |---                                 |
-| `make all`   | Build CTGL and run the examples.   |
-| `make test`  | Build CTGL and run the test suite. |
-| `make clean` | Clean the current directory.       |
+| Command      | Objective                              |
+|---           |---                                     |
+| `make all`   | Build the CTGL and run the examples.   |
+| `make test`  | Build the CTGL and run the test suite. |
+| `make clean` | Clean the current directory.           |
 
 **Note:** You can specify a compiler flag to any of the build commands to select a different compiler target.  For example, to build the test suite using Clang, run `make test COMPILER=clang++`.

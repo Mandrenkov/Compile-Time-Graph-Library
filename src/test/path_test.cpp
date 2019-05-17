@@ -40,5 +40,7 @@ TEST(PathTest, Nodes) {
     EXPECT_TRUE((std::is_same<NodesType<forge::E11, forge::E11>, List<forge::N1>>::value));
 
     // Multiple
-    // EXPECT_TRUE((std::is_same<NodesType<forge::E12>, List<forge::N1, forge::N2>>::value));
+    EXPECT_TRUE((std::is_same<NodesType<forge::E12>, List<forge::N1, forge::N2>>::value));
+    EXPECT_TRUE((std::is_same<NodesType<forge::E21>, List<forge::N2, forge::N1>>::value));
+    EXPECT_TRUE((std::is_same<NodesType<forge::E12, forge::E23>, List<forge::N1, forge::N2, forge::N3>>::value));
 }

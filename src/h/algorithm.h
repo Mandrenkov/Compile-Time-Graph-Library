@@ -6,8 +6,7 @@ namespace ctgl {
     // Implementation of path().
     // -------------------------------------------------------------------------
     namespace detail {
-        // [Template Specialization] The source Node |S| is the same as the target
-        // Node |T|.
+        // [Template Specialization] The source Node |S| is the same as the target Node |T|.
         template <typename G, typename S, typename... Ns>
         constexpr auto path(ADL, G, S, S, List<Ns...>) {
             return List<S>{};

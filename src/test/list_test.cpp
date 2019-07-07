@@ -70,12 +70,6 @@ TEST(ListTest, Push) {
     EXPECT_TRUE((std::is_same<PushType<int, List<float, double>>, List<int, float, double>>::value));
 }
 
-// Tests for the pop() function.
-TEST(ListTest, Pop) {
-    EXPECT_TRUE((std::is_same<PopType<List<int>>, List<>>::value));
-    EXPECT_TRUE((std::is_same<PopType<List<int, float, double>>, List<float, double>>::value));
-}
-
 // Tests for the remove() function.
 TEST(ListTest, Remove) {
     // Empty

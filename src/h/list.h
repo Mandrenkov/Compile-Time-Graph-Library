@@ -4,85 +4,160 @@
 #include <typeinfo>
 
 namespace ctgl {
+
+    // Declarations
+    // -------------------------------------------------------------------------
+
     namespace list {
-        // List represents the list of types specified by |Ts|.
+        // List represents a list of types.
         template <typename... Ts>
         struct List {};
 
         // Compile-Time Functions
-        // -------------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         // Returns the size of the given List.
         template <typename... Ts>
-        constexpr int size(List<Ts...>) { return sizeof...(Ts); }
+        constexpr int size(List<Ts...>);
 
-        // Returns true if the given List is empty.
+        // Reports whether the given List is empty.
         template <typename... Ts>
-        constexpr bool empty(List<Ts...>) { return sizeof...(Ts) == 0; }
+        constexpr bool empty(List<Ts...>);
 
-        // Returns a new List that is the concatenation of the given Lists.
+        // Links the given Lists in their provided order.
         template <typename... Ts, typename... Us>
-        constexpr auto link(List<Ts...>, List<Us...>) -> List<Ts..., Us...>;
+        constexpr auto link(List<Ts...>, List<Us...>);
 
-        // Returns a new List that is constructed by pushing |T| to the front of the given List.
+        // Pushes the given element to the front of the provided List.
         template <typename T, typename... Ts>
-        constexpr auto push(T, List<Ts...>) -> List<T, Ts...>;
+        constexpr auto push(T, List<Ts...>);
 
-        // Returns a new List that is constructed by popping the type at the front of the given List.
+        // Removes the element at the front of the given List.
         template <typename T, typename... Ts>
-        constexpr auto pop(List<T, Ts...>) -> List<Ts...>;
+        constexpr auto pop(List<T, Ts...>);
 
-        // Returns a new List that is constructed by removing all occurrences of type |T| from the given List.
+        // Removes all occurrences of the given element from the provided List.
         template <typename T, typename F, typename... Ts>
-        constexpr auto remove(T, List<F, Ts...>) -> decltype(push(F{}, remove(T{}, List<Ts...>{})));
+        constexpr auto remove(T, List<F, Ts...>);
+
+        // Returns the element at the front of the given List.
+        template <typename T, typename... Ts>
+        constexpr auto front(List<T, Ts...>);
+
+        // Reports whether the given element exists in the provided List.
+        template <typename T, typename F, typename... Ts>
+        constexpr bool contains(T, List<F, Ts...>);
+
+        // Removes all duplicate elements from the given List.
+        template <typename T, typename... Ts>
+        constexpr auto unique(List<T, Ts...>);
+
+        // Reports whether the given Lists are the same.
+        template <typename... Ts>
+        constexpr bool operator==(List<Ts...>, List<Ts...>);
+
+        // Run-Time Functions
+        // ---------------------------------------------------------------------
+
+        // Streams the names of the types that compose the given List to the provided output stream.
+        template <typename T, typename... Ts, typename>
+        inline std::ostream& operator<<(std::ostream& out, const List<T, Ts...>& list);
+    }
+
+    // Definitions
+    // -------------------------------------------------------------------------
+
+    namespace list {
+        // Compile-Time Functions
+        // ---------------------------------------------------------------------
+
+        template <typename... Ts>
+        constexpr int size(List<Ts...>) {
+            return sizeof...(Ts);
+        }
+
+        template <typename... Ts>
+        constexpr bool empty(List<Ts...>) {
+            return sizeof...(Ts) == 0;
+        }
+
+        template <typename... Ts, typename... Us>
+        constexpr auto link(List<Ts...>, List<Us...>) {
+            return List<Ts..., Us...>{};
+        }
 
         template <typename T, typename... Ts>
-        constexpr auto remove(T, List<T, Ts...>) -> decltype(remove(T{}, List<Ts...>{}));
+        constexpr auto push(T, List<Ts...>) {
+            return List<T, Ts...>{};
+        }
+
+        template <typename T, typename... Ts>
+        constexpr auto pop(List<T, Ts...>) {
+            return List<Ts...>{};
+        }
+
+        template <typename T, typename F, typename... Ts>
+        constexpr auto remove(T, List<F, Ts...>) {
+            return push(F{}, remove(T{}, List<Ts...>{}));
+        }
+
+        template <typename T, typename... Ts>
+        constexpr auto remove(T, List<T, Ts...>) {
+            return remove(T{}, List<Ts...>{});
+        }
 
         template <typename T>
-        constexpr auto remove(T, List<>) -> List<>;
+        constexpr auto remove(T, List<>) {
+            return List<>{};
+        }
 
-        // Returns the type at the front of the given List.
         template <typename T, typename... Ts>
-        constexpr auto front(List<T, Ts...>) -> T;
+        constexpr auto front(List<T, Ts...>) {
+            return T{};
+        }
 
-        // Returns true if the given List contains the provided type.
         template <typename T, typename F, typename... Ts>
-        constexpr bool contains(T, List<F, Ts...>) { return contains(T{}, List<Ts...>{}); }
+        constexpr bool contains(T, List<F, Ts...>) {
+            return contains(T{}, List<Ts...>{});
+        }
 
         template <typename T, typename... Ts>
-        constexpr bool contains(T, List<T, Ts...>) { return true; }
+        constexpr bool contains(T, List<T, Ts...>) {
+            return true;
+        }
 
         template <typename T>
-        constexpr bool contains(T, List<>) { return false; }
+        constexpr bool contains(T, List<>) {
+            return false;
+        }
 
-        // Returns a new List that is constructed by removing all duplicate types in the given List.
         template <typename T, typename... Ts>
         constexpr auto unique(List<T, Ts...>) {
             constexpr bool found = contains(T{}, List<Ts...>{});
             if constexpr (found) {
-                // Type |T| exists in the tail |Ts|.
                 return unique(List<Ts...>{});
             } else {
-                // Type |T| does not exist in the tail |Ts|.
                 return decltype(push(T{}, unique(List<Ts...>{}))){};
             }
         }
 
-        constexpr auto unique(List<>) { return List<>{}; }
+        constexpr auto unique(List<>) {
+            return List<>{};
+        }
 
-        // Returns true if the given Lists are the same.
         template <typename... Ts>
-        constexpr bool operator==(List<Ts...>, List<Ts...>) { return true; }
+        constexpr bool operator==(List<Ts...>, List<Ts...>) {
+            return true;
+        }
 
         template <typename... Ts, typename... Us>
-        constexpr bool operator==(List<Ts...>, List<Us...>) { return false; }
-
+        constexpr bool operator==(List<Ts...>, List<Us...>) {
+            return false;
+        }
 
         // Run-Time Functions
-        // -------------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
-        // Streams the names of the types that compose the given List to the provided output stream.
         template <typename T, typename... Ts, typename = std::enable_if_t<sizeof... (Ts) != 0>>
         inline std::ostream& operator<<(std::ostream& out, const List<T, Ts...>& list) {
             return out << typeid(T).name() << ' ' << List<Ts...>{};

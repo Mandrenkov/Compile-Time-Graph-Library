@@ -37,4 +37,4 @@ bin:
 	@mkdir -p $(BIN_DIR)
 
 clean:
-	@rm -f $(BIN_DIR)
+	@rm -rf $(BIN_DIR)

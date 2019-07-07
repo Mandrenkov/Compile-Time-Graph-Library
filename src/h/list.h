@@ -56,12 +56,17 @@ namespace ctgl {
         template <typename... Ts>
         constexpr bool operator==(List<Ts...>, List<Ts...>);
 
-        // Run-Time Functions
-        // ---------------------------------------------------------------------
+        // Adds an element to the front of a List.
+        template <typename T, typename... Ts>
+        constexpr auto operator+(T, List<Ts...>);
 
-        // Streams the names of the types that compose the given List to the provided output stream.
-        template <typename T, typename... Ts, typename>
-        inline std::ostream& operator<<(std::ostream& out, const List<T, Ts...>& list);
+        // Adds an element to the back of a List.
+        template <typename... Ts, typename T>
+        constexpr auto operator+(List<Ts...>, T);
+
+        // Concatanates two Lists together.
+        template <typename... Ts, typename... Us>
+        constexpr auto operator+(List<Ts...>, List<Us...>);
     }
 
     // Definitions
@@ -155,9 +160,25 @@ namespace ctgl {
             return false;
         }
 
+        template <typename T, typename... Ts>
+        constexpr auto operator+(T, List<Ts...>) {
+            return List<T>{} + List<Ts...>{};
+        }
+
+        template <typename... Ts, typename T>
+        constexpr auto operator+(List<Ts...>, T) {
+            return List<Ts...>{} + List<T>{};
+        }
+
+        template <typename... Ts, typename... Us>
+        constexpr auto operator+(List<Ts...>, List<Us...>) {
+            return List<Ts..., Us...>{};
+        }
+
         // Run-Time Functions
         // ---------------------------------------------------------------------
 
+        // Streams the names of the types that compose the given List to the provided output stream.
         template <typename T, typename... Ts, typename = std::enable_if_t<sizeof... (Ts) != 0>>
         inline std::ostream& operator<<(std::ostream& out, const List<T, Ts...>& list) {
             return out << typeid(T).name() << ' ' << List<Ts...>{};

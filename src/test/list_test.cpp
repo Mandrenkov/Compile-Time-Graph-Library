@@ -147,6 +147,22 @@ TEST(ListTest, Equals) {
     EXPECT_FALSE((List<int, bool>{}) == (List<bool, int>{}));
 }
 
+// Tests for the "+" operator.
+TEST(ListTest, Plus) {
+    // Empty
+    EXPECT_TRUE(List<>{} + List<>{} == List<>{});
+
+    // Single
+    EXPECT_TRUE(int{} + List<>{} == List<int>{});
+    EXPECT_TRUE(List<>{} + int{} == List<int>{});
+
+    // Multiple
+    EXPECT_TRUE((int{} + List<int>{} == List<int, int>{}));
+    EXPECT_TRUE((int{} + List<bool>{} == List<int, bool>{}));
+    EXPECT_TRUE((List<int>{} + bool{} == List<int, bool>{}));
+    EXPECT_TRUE((List<int>{} + List<bool>{} == List<int, bool>{}));
+}
+
 // Tests for the "<<" operator.
 TEST(ListTest, OutputStream) {
     {   // Empty

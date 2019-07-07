@@ -100,4 +100,7 @@ TEST(AlgorithmTest, Path) {
     EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N4, forge::N2>, List<forge::N4, forge::N2>>::value));
     EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N4, forge::N3>, List<forge::N4, forge::N2, forge::N3>>::value));
     EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N4, forge::N4>, List<forge::N4>>::value));
+
+    // Bow
+    // EXPECT_TRUE((std::is_same<PathType<forge::Bow, forge::N5, forge::N6>, List<forge::N5, forge::N7, forge::N6>>::value));
 }

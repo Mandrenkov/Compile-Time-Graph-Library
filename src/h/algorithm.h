@@ -24,13 +24,13 @@ namespace ctgl {
                 return List<>{};
             } else if constexpr (list::empty(skip)) {
                 // Node |T| is transitively connected to Node |S| through Node |N|.
-                return decltype(push(S{}, branch)){};
+                return S{} + branch;
             } else if constexpr (list::empty(branch)) {
                 // Node |T| is transivitely connected to Node |S| through a Node in |Ns|.
                 return skip;
             } else if constexpr (list::size(skip) > list::size(branch)) {
                 // The shortest path to Node |T| from Node |S| is through Node |N|.
-                return decltype(list::push(S{}, branch)){};
+                return S{} + branch;
             } else {
                 // The shortest path to Node |T| from Node |S| is through a Node in |Ns|.
                 return skip;

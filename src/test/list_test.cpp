@@ -13,15 +13,6 @@ using namespace ctgl;
 // Convenient Type Aliases
 // -----------------------------------------------------------------------------
 template <typename T, typename U>
-using LinkType = decltype(link(T{}, U{}));
-
-template <typename T, typename U>
-using PushType = decltype(push(T{}, U{}));
-
-template <typename T>
-using PopType = decltype(pop(T{}));
-
-template <typename T, typename U>
 using RemoveType = decltype(remove(T{}, U{}));
 
 template <typename T>
@@ -48,27 +39,6 @@ TEST(ListTest, Empty) {
     EXPECT_FALSE(empty(List<int, bool>{}));
 }
 
-// Tests for the link() function.
-TEST(ListTest, Link) {
-    // Empty
-    EXPECT_TRUE((std::is_same<LinkType<List<>, List<>>, List<>>::value));
-
-    // Single
-    EXPECT_TRUE((std::is_same<LinkType<List<>, List<int>>, List<int>>::value));
-    EXPECT_TRUE((std::is_same<LinkType<List<int>, List<>>, List<int>>::value));
-
-    // Multiple
-    EXPECT_TRUE((std::is_same<LinkType<List<int>, List<int>>, List<int, int>>::value));
-    EXPECT_TRUE((std::is_same<LinkType<List<int>, List<float>>, List<int, float>>::value));
-    EXPECT_TRUE((std::is_same<LinkType<List<int, bool>, List<float, double>>, List<int, bool, float, double>>::value));
-}
-
-// Tests for the push() function.
-TEST(ListTest, Push) {
-    EXPECT_TRUE((std::is_same<PushType<int, List<>>, List<int>>::value));
-    EXPECT_TRUE((std::is_same<PushType<int, List<bool>>, List<int, bool>>::value));
-    EXPECT_TRUE((std::is_same<PushType<int, List<float, double>>, List<int, float, double>>::value));
-}
 
 // Tests for the remove() function.
 TEST(ListTest, Remove) {

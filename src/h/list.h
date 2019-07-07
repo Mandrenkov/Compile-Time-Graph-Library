@@ -24,14 +24,6 @@ namespace ctgl {
         template <typename... Ts>
         constexpr bool empty(List<Ts...>);
 
-        // Links the given Lists in their provided order.
-        template <typename... Ts, typename... Us>
-        constexpr auto link(List<Ts...>, List<Us...>);
-
-        // Pushes the given element to the front of the provided List.
-        template <typename T, typename... Ts>
-        constexpr auto push(T, List<Ts...>);
-
         // Removes all occurrences of the given element from the provided List.
         template <typename T, typename F, typename... Ts>
         constexpr auto remove(T, List<F, Ts...>);
@@ -82,24 +74,9 @@ namespace ctgl {
             return sizeof...(Ts) == 0;
         }
 
-        template <typename... Ts, typename... Us>
-        constexpr auto link(List<Ts...>, List<Us...>) {
-            return List<Ts..., Us...>{};
-        }
-
-        template <typename T, typename... Ts>
-        constexpr auto push(T, List<Ts...>) {
-            return List<T, Ts...>{};
-        }
-
-        template <typename T, typename... Ts>
-        constexpr auto pop(List<T, Ts...>) {
-            return List<Ts...>{};
-        }
-
         template <typename T, typename F, typename... Ts>
         constexpr auto remove(T, List<F, Ts...>) {
-            return push(F{}, remove(T{}, List<Ts...>{}));
+            return F{} + remove(T{}, List<Ts...>{});
         }
 
         template <typename T, typename... Ts>
@@ -138,7 +115,7 @@ namespace ctgl {
             if constexpr (found) {
                 return unique(List<Ts...>{});
             } else {
-                return decltype(push(T{}, unique(List<Ts...>{}))){};
+                return T{} + unique(List<Ts...>{});
             }
         }
 

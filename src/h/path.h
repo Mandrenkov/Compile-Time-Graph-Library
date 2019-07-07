@@ -18,9 +18,9 @@ namespace ctgl {
         }
 
         // Returns the length of the given Path.
-        template <typename F, typename T, int W, typename... Es>
-        constexpr int length(Path<Edge<F, T, W>, Es...>) {
-            return W + length(Path<Es...>{});
+        template <typename E, typename... Es>
+        constexpr int length(Path<E, Es...>) {
+            return E::weight + length(Path<Es...>{});
         }
 
 
@@ -30,9 +30,9 @@ namespace ctgl {
         }
 
         // Returns a List of unique Nodes in the given Path.
-        template <typename F, typename T, int W, typename... Es>
-        constexpr auto nodes(Path<Edge<F, T, W>, Es...>) {
-            return decltype(list::unique(list::link(List<F, T>{}, nodes(Path<Es...>{})))){};
+        template <typename E, typename... Es>
+        constexpr auto nodes(Path<E, Es...>) {
+            return decltype(list::unique(List<typename E::From, typename E::To>{} + nodes(Path<Es...>{}))){};
         }
     }
 

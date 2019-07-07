@@ -36,7 +36,7 @@ namespace ctgl {
 
         // [Template Specialization] The first Edge in the List |Es| originates from the source Node |N|.
         template <typename N, typename T, int W, typename... Es>
-        constexpr auto adjacent(N, List<Edge<N, T, W>, Es...>) -> decltype(push(T{}, adjacent(N{}, List<Es...>{})));
+        constexpr auto adjacent(N, List<Edge<N, T, W>, Es...>) -> decltype(T{} + adjacent(N{}, List<Es...>{}));
 
         // [Template Specialization] The first Edge in the List |Es| does not originate from the source Node |N|.
         template <typename N, typename F, typename T, int W, typename... Es>
@@ -57,7 +57,7 @@ namespace ctgl {
 
         // [Template Specialization] The first Node in the adjacency List represents an Edge to a Node other than Node |N|.
         template <typename G, typename N, typename T, typename... Ts, typename = ctgl::detail::enable_if_different_t<N, T>>
-        constexpr auto connected(G, N, List<T, Ts...>) -> decltype(list::push(T{}, list::link(connected(G{}, N{}, List<Ts...>{}), connected(G{}, T{}, adjacent(G{}, T{})))));
+        constexpr auto connected(G, N, List<T, Ts...>) -> decltype(T{} + connected(G{}, N{}, List<Ts...>{}) + connected(G{}, T{}, adjacent(G{}, T{})));
 
         // Returns the Nodes in the Graph |G| that are connected to Node |N|.
         template <typename G, typename N>
@@ -68,7 +68,7 @@ namespace ctgl {
                 return List<>{};
             } else {
                 // The Graph contains Node |N|.
-                return decltype(list::unique(list::push(N{}, connected(G{}, N{}, adjacent(G{}, N{}))))){};
+                return decltype(list::unique(N{} + connected(G{}, N{}, adjacent(G{}, N{})))){};
             }
         }
     }

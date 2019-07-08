@@ -1,38 +1,48 @@
 #pragma once
 
-#include "graph.h"
 #include "list.h"
 
 namespace ctgl {
+
+    // Declarations
+    // -------------------------------------------------------------------------
+
     namespace path {
         // Path represents a sequences of Edges.
         template <typename... Es>
         using Path = ctgl::List<Es...>;
 
-        // Compile-Time Functions
-        // -------------------------------------------------------------------------
+        // Calculates the length of the given Path.
+        template <typename... Es>
+        constexpr int length(Path<Es...>);
 
-        // [Template Specialization] No Edges remain in the Path.
-        constexpr int length(Path<>) {
-            return 0;
-        }
+        // Finds the unique Nodes in the given Path.
+        template <typename... Es>
+        constexpr auto nodes(Path<Es...>);
+    }
 
-        // Returns the length of the given Path.
+    // Definitions
+    // -------------------------------------------------------------------------
+
+    namespace path {
         template <typename E, typename... Es>
         constexpr int length(Path<E, Es...>) {
             return E::weight + length(Path<Es...>{});
         }
 
-
-        // [Template Specialization] No Edges remain in the Path.
-        constexpr auto nodes(Path<>) {
-            return List<>{};
+        template<>
+        constexpr int length(Path<>) {
+            return 0;
         }
 
-        // Returns a List of unique Nodes in the given Path.
         template <typename E, typename... Es>
         constexpr auto nodes(Path<E, Es...>) {
-            return decltype(list::unique(List<typename E::From, typename E::To>{} + nodes(Path<Es...>{}))){};
+            return list::unique(List<typename E::From, typename E::To>{} + nodes(Path<Es...>{}));
+        }
+
+        template<>
+        constexpr auto nodes(Path<>) {
+            return List<>{};
         }
     }
 

@@ -32,11 +32,11 @@ namespace ctgl {
 
         // Finds all Nodes adjacent to the given Node in the provided Graph.
         template <typename G, typename N>
-        constexpr auto adjacent(G, N);
+        constexpr auto adjacent(G, N) noexcept;
 
         // Finds all Nodes connected to the given Node in the provided Graph.
         template <typename G, typename N>
-        constexpr auto connected(G, N);
+        constexpr auto connected(G, N) noexcept;
     }
 
     // Definitions
@@ -44,30 +44,30 @@ namespace ctgl {
 
     namespace graph {
         template <typename G, typename N>
-        constexpr auto adjacent(G, N) {
+        constexpr auto adjacent(G, N) noexcept {
             return list::unique(adjacent(N{}, typename G::Edges{}));
         }
 
         template <typename N, typename T, int W, typename... Es>
-        constexpr auto adjacent(N, List<Edge<N, T, W>, Es...>) {
+        constexpr auto adjacent(N, List<Edge<N, T, W>, Es...>) noexcept {
             // The first Edge in the List originates from the source Node.
             return T{} + adjacent(N{}, List<Es...>{});
         }
 
         template <typename N, typename F, typename T, int W, typename... Es>
-        constexpr auto adjacent(N, List<Edge<F, T, W>, Es...>) {
+        constexpr auto adjacent(N, List<Edge<F, T, W>, Es...>) noexcept {
             // The first Edge in the List does NOT originate from the source Node.
             return adjacent(N{}, List<Es...>{});
         }
 
         template <typename N>
-        constexpr auto adjacent(N, List<>) {
+        constexpr auto adjacent(N, List<>) noexcept {
             // All the Edges have been traversed.
             return List<>{};
         }
 
         template <typename G, typename N>
-        constexpr auto connected(G, N) {
+        constexpr auto connected(G, N) noexcept {
             constexpr bool feasible = list::contains(N{}, typename G::Nodes{});
             if constexpr (feasible) {
                 return list::unique(N{} + connected(G{}, N{}, adjacent(G{}, N{})));
@@ -77,19 +77,19 @@ namespace ctgl {
         }
 
         template <typename G, typename N, typename T, typename... Ts, typename = ctgl::detail::enable_if_different_t<N, T>>
-        constexpr auto connected(G, N, List<T, Ts...>) {
+        constexpr auto connected(G, N, List<T, Ts...>) noexcept {
             // The first Node in the adjacency List connects to a Node other than the target Node.
             return T{} + connected(G{}, N{}, List<Ts...>{}) + connected(G{}, T{}, adjacent(G{}, T{}));
         }
 
         template <typename G, typename N, typename... Ts>
-        constexpr auto connected(G, N, List<N, Ts...>) {
+        constexpr auto connected(G, N, List<N, Ts...>) noexcept {
             // The first Node in the adjacency List loops back to the target Node.
             return connected(G{}, N{}, List<Ts...>{});
         }
 
         template <typename G, typename N>
-        constexpr auto connected(G, N, List<>) {
+        constexpr auto connected(G, N, List<>) noexcept {
             // All the Edges have been traversed.
             return List<>{};
         }

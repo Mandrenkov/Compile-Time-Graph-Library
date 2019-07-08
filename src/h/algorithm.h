@@ -9,7 +9,7 @@ namespace ctgl {
         // [Template Specialization] The source Node |S| differs from the target
         // Node |T| and there is at least one Edge from |S| that has yet to be traversed.
         template <typename G, typename S, typename T, typename N, typename... Ns, typename = enable_if_different_t<S, T>>
-        constexpr auto path(ADL, G, S, T, List<N, Ns...>) {
+        constexpr auto path(ADL, G, S, T, List<N, Ns...>) noexcept {
             constexpr auto skip = path(ADL{}, G{}, S{}, T{}, List<Ns...>{});
             constexpr auto branch = path(ADL{}, G{}, N{}, T{}, decltype(graph::adjacent(G{}, N{})){});
 
@@ -33,14 +33,14 @@ namespace ctgl {
 
         // [Template Specialization] The source Node |S| is the same as the target Node |T|.
         template <typename G, typename S, typename... Ns>
-        constexpr auto path(ADL, G, S, S, List<Ns...>) {
+        constexpr auto path(ADL, G, S, S, List<Ns...>) noexcept {
             return List<S>{};
         }
 
         // [Template Specialization] The source Node |S| differs from the target
         // Node |T| and all Edges from |S| have been traversed.
         template <typename G, typename S, typename T, typename = enable_if_different_t<S, T>>
-        constexpr auto path(ADL, G, S, T, List<>) {
+        constexpr auto path(ADL, G, S, T, List<>) noexcept {
             return List<>{};
         }
     }
@@ -48,7 +48,7 @@ namespace ctgl {
     // Returns the shortest path between Node |S| and Node |T| in the |G| Graph.
     // If there is no path from |S| to |T|, an empty List is returned.
     template <typename G, typename S, typename T>
-    constexpr auto path(G, S, T) {
+    constexpr auto path(G, S, T) noexcept {
         constexpr auto nodes = typename G::Nodes{};
         constexpr bool feasible = list::contains(S{}, nodes) && list::contains(T{}, nodes);
         if constexpr (!feasible) {
@@ -65,7 +65,7 @@ namespace ctgl {
     // Returns the shortest distance between Node |S| and Node |T| in the Graph |G|.
     // If there is no path from |S| to |T|, INF is returned.
     template <typename G, typename S, typename T>
-    constexpr int distance(G, S, T) {
+    constexpr int distance(G, S, T) noexcept {
         constexpr auto size = list::size(ctgl::path(G{}, S{}, T{}));
         return size == 0 ? ctgl::INF : size - 1;
     }

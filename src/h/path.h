@@ -14,11 +14,11 @@ namespace ctgl {
 
         // Calculates the length of the given Path.
         template <typename... Es>
-        constexpr int length(Path<Es...>);
+        constexpr int length(Path<Es...>) noexcept ;
 
         // Finds the unique Nodes in the given Path.
         template <typename... Es>
-        constexpr auto nodes(Path<Es...>);
+        constexpr auto nodes(Path<Es...>) noexcept ;
     }
 
     // Definitions
@@ -26,22 +26,22 @@ namespace ctgl {
 
     namespace path {
         template <typename E, typename... Es>
-        constexpr int length(Path<E, Es...>) {
+        constexpr int length(Path<E, Es...>) noexcept {
             return E::weight + length(Path<Es...>{});
         }
 
         template<>
-        constexpr int length(Path<>) {
+        constexpr int length(Path<>) noexcept {
             return 0;
         }
 
         template <typename E, typename... Es>
-        constexpr auto nodes(Path<E, Es...>) {
+        constexpr auto nodes(Path<E, Es...>) noexcept {
             return list::unique(List<typename E::From, typename E::To>{} + nodes(Path<Es...>{}));
         }
 
         template<>
-        constexpr auto nodes(Path<>) {
+        constexpr auto nodes(Path<>) noexcept {
             return List<>{};
         }
     }

@@ -13,9 +13,6 @@ namespace ctgl {
         template <typename... Ts>
         struct List {};
 
-        // Compile-Time Functions
-        // ---------------------------------------------------------------------
-
         // Returns the size of the given List.
         template <typename... Ts>
         constexpr int size(List<Ts...>);
@@ -61,9 +58,6 @@ namespace ctgl {
     // -------------------------------------------------------------------------
 
     namespace list {
-        // Compile-Time Functions
-        // ---------------------------------------------------------------------
-
         template <typename... Ts>
         constexpr int size(List<Ts...>) {
             return sizeof...(Ts);
@@ -147,9 +141,6 @@ namespace ctgl {
         constexpr auto operator+(List<Ts...>, List<Us...>) {
             return List<Ts..., Us...>{};
         }
-
-        // Run-Time Functions
-        // ---------------------------------------------------------------------
 
         // Streams the names of the types that compose the given List to the provided output stream.
         template <typename T, typename... Ts, typename = std::enable_if_t<sizeof... (Ts) != 0>>

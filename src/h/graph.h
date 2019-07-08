@@ -4,6 +4,10 @@
 #include "utility.h"
 
 namespace ctgl {
+
+    // Declarations
+    // -------------------------------------------------------------------------
+
     namespace graph {
         // Node represents a node with the |ID| identifier.
         template <int ID>
@@ -26,50 +30,68 @@ namespace ctgl {
             using Edges = E;
         };
 
+        // Finds all Nodes adjacent to the given Node in the provided Graph.
+        template <typename G, typename N>
+        constexpr auto adjacent(G, N);
 
-        // Compile-Time Functions
-        // -------------------------------------------------------------------------
+        // Finds all Nodes connected to the given Node in the provided Graph.
+        template <typename G, typename N>
+        constexpr auto connected(G, N);
+    }
 
-        // [Template Specialization] All of the Edges from Node |N| have been traversed.
-        template <typename N>
-        constexpr auto adjacent(N, List<>) -> decltype(List<>{});
+    // Definitions
+    // -------------------------------------------------------------------------
 
-        // [Template Specialization] The first Edge in the List |Es| originates from the source Node |N|.
+    namespace graph {
+        template <typename G, typename N>
+        constexpr auto adjacent(G, N) {
+            return list::unique(adjacent(N{}, typename G::Edges{}));
+        }
+
         template <typename N, typename T, int W, typename... Es>
-        constexpr auto adjacent(N, List<Edge<N, T, W>, Es...>) -> decltype(T{} + adjacent(N{}, List<Es...>{}));
+        constexpr auto adjacent(N, List<Edge<N, T, W>, Es...>) {
+            // The first Edge in the List originates from the source Node.
+            return T{} + adjacent(N{}, List<Es...>{});
+        }
 
-        // [Template Specialization] The first Edge in the List |Es| does not originate from the source Node |N|.
         template <typename N, typename F, typename T, int W, typename... Es>
-        constexpr auto adjacent(N, List<Edge<F, T, W>, Es...>) -> decltype(adjacent(N{}, List<Es...>{}));
+        constexpr auto adjacent(N, List<Edge<F, T, W>, Es...>) {
+            // The first Edge in the List does NOT originate from the source Node.
+            return adjacent(N{}, List<Es...>{});
+        }
 
-        // Returns the Nodes in the Graph |G| that are adjacent to Node |N|.
-        template <typename G, typename N>
-        constexpr auto adjacent(G, N) -> decltype(adjacent(N{}, typename G::Edges{}));
+        template <typename N>
+        constexpr auto adjacent(N, List<>) {
+            // All the Edges have been traversed.
+            return List<>{};
+        }
 
-
-        // [Template Specialization] All of the Edges from Node |N| have been traversed.
-        template <typename G, typename N>
-        constexpr auto connected(G, N, List<>) -> decltype(List<>{});
-
-        // [Template Specialization] The first Node in the adjacency List represents a loop at Node |N|.
-        template <typename G, typename N, typename... Ts>
-        constexpr auto connected(G, N, List<N, Ts...>) -> decltype(connected(G{}, N{}, List<Ts...>{}));
-
-        // [Template Specialization] The first Node in the adjacency List represents an Edge to a Node other than Node |N|.
-        template <typename G, typename N, typename T, typename... Ts, typename = ctgl::detail::enable_if_different_t<N, T>>
-        constexpr auto connected(G, N, List<T, Ts...>) -> decltype(T{} + connected(G{}, N{}, List<Ts...>{}) + connected(G{}, T{}, adjacent(G{}, T{})));
-
-        // Returns the Nodes in the Graph |G| that are connected to Node |N|.
         template <typename G, typename N>
         constexpr auto connected(G, N) {
             constexpr bool feasible = list::contains(N{}, typename G::Nodes{});
-            if constexpr (!feasible) {
-                // The Graph does not contain Node |N|.
-                return List<>{};
+            if constexpr (feasible) {
+                return list::unique(N{} + connected(G{}, N{}, adjacent(G{}, N{})));
             } else {
-                // The Graph contains Node |N|.
-                return decltype(list::unique(N{} + connected(G{}, N{}, adjacent(G{}, N{})))){};
+                return List<>{};
             }
+        }
+
+        template <typename G, typename N, typename T, typename... Ts, typename = ctgl::detail::enable_if_different_t<N, T>>
+        constexpr auto connected(G, N, List<T, Ts...>) {
+            // The first Node in the adjacency List connects to a Node other than the target Node.
+            return T{} + connected(G{}, N{}, List<Ts...>{}) + connected(G{}, T{}, adjacent(G{}, T{}));
+        }
+
+        template <typename G, typename N, typename... Ts>
+        constexpr auto connected(G, N, List<N, Ts...>) {
+            // The first Node in the adjacency List loops back to the target Node.
+            return connected(G{}, N{}, List<Ts...>{});
+        }
+
+        template <typename G, typename N>
+        constexpr auto connected(G, N, List<>) {
+            // All the Edges have been traversed.
+            return List<>{};
         }
     }
 

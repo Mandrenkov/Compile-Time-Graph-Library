@@ -6,12 +6,6 @@ namespace ctgl {
     // Implementation of path().
     // -------------------------------------------------------------------------
     namespace detail {
-        // [Template Specialization] The source Node |S| is the same as the target Node |T|.
-        template <typename G, typename S, typename... Ns>
-        constexpr auto path(ADL, G, S, S, List<Ns...>) {
-            return List<S>{};
-        }
-
         // [Template Specialization] The source Node |S| differs from the target
         // Node |T| and there is at least one Edge from |S| that has yet to be traversed.
         template <typename G, typename S, typename T, typename N, typename... Ns, typename = enable_if_different_t<S, T>>
@@ -35,6 +29,12 @@ namespace ctgl {
                 // The shortest path to Node |T| from Node |S| is through a Node in |Ns|.
                 return skip;
             }
+        }
+
+        // [Template Specialization] The source Node |S| is the same as the target Node |T|.
+        template <typename G, typename S, typename... Ns>
+        constexpr auto path(ADL, G, S, S, List<Ns...>) {
+            return List<S>{};
         }
 
         // [Template Specialization] The source Node |S| differs from the target

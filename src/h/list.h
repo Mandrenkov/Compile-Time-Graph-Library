@@ -22,16 +22,16 @@ namespace ctgl {
         constexpr bool empty(List<Ts...>) noexcept;
 
         // Removes all occurrences of the given element from the provided List.
-        template <typename T, typename F, typename... Ts>
-        constexpr auto remove(T, List<F, Ts...>) noexcept;
+        template <typename T, typename... Ts>
+        constexpr auto remove(T, List<Ts...>) noexcept;
 
         // Returns the element at the front of the given List.
         template <typename T, typename... Ts>
         constexpr auto front(List<T, Ts...>) noexcept;
 
         // Reports whether the given element exists in the provided List.
-        template <typename T, typename F, typename... Ts>
-        constexpr bool contains(T, List<F, Ts...>) noexcept;
+        template <typename T, typename... Ts>
+        constexpr bool contains(T, List<Ts...>) noexcept;
 
         // Removes all duplicate elements from the given List.
         template <typename T, typename... Ts>

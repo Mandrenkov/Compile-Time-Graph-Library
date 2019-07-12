@@ -49,7 +49,7 @@ namespace ctgl {
         template <typename... Ts, typename T>
         constexpr auto operator+(List<Ts...>, T) noexcept;
 
-        // Concatanates two Lists together.
+        // Concatenates two Lists together.
         template <typename... Ts, typename... Us>
         constexpr auto operator+(List<Ts...>, List<Us...>) noexcept;
     }

@@ -39,7 +39,6 @@ TEST(ListTest, Empty) {
     EXPECT_FALSE(empty(List<int, bool>{}));
 }
 
-
 // Tests for the remove() function.
 TEST(ListTest, Remove) {
     // Empty
@@ -59,6 +58,22 @@ TEST(ListTest, Remove) {
 TEST(ListTest, Front) {
     EXPECT_TRUE((std::is_same<FrontType<List<int>>, int>::value));
     EXPECT_TRUE((std::is_same<FrontType<List<int, float, double>>, int>::value));
+}
+
+// Tests for the find() function.
+TEST(ListTest, Find) {
+    // Empty
+    EXPECT_EQ(find(int{}, List<>{}), DNE);
+
+    // Exists
+    EXPECT_EQ(find(int{}, List<int>{}), 0);
+    EXPECT_EQ(find(int{}, List<int, bool>{}), 0);
+    EXPECT_EQ(find(bool{}, List<int, bool>{}), 1);
+    EXPECT_EQ(find(bool{}, List<int, float, double, bool>{}), 3);
+
+    // Does Not Exist
+    EXPECT_EQ(find(int{}, List<bool>{}), DNE);
+    EXPECT_EQ(find(bool{}, List<int, float, double>{}), DNE);
 }
 
 // Tests for the contains() function.

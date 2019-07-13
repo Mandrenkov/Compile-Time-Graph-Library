@@ -114,19 +114,9 @@ namespace ctgl {
             return find(T{}, List<Ts...>{}, 0);
         }
 
-        template <typename T, typename F, typename... Ts>
-        constexpr bool contains(T, List<F, Ts...>) noexcept {
-            return contains(T{}, List<Ts...>{});
-        }
-
         template <typename T, typename... Ts>
-        constexpr bool contains(T, List<T, Ts...>) noexcept {
-            return true;
-        }
-
-        template <typename T>
-        constexpr bool contains(T, List<>) noexcept {
-            return false;
+        constexpr bool contains(T, List<Ts...>) noexcept {
+            return find(T{}, List<Ts...>{}) != DNE;
         }
 
         template <typename T, typename... Ts>

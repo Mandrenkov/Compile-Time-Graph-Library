@@ -31,11 +31,6 @@ namespace ctgl {
         template <typename T, typename... Ts>
         constexpr auto front(List<T, Ts...>) noexcept;
 
-        // Finds the index of the given element in the provided List.
-        // If the element does not exist in the List, DNE is returned.
-        template <typename T, typename... Ts>
-        constexpr size_t find(T, list::List<Ts...>) noexcept;
-
         // Reports whether the given element exists in the provided List.
         template <typename T, typename... Ts>
         constexpr bool contains(T, List<Ts...>) noexcept;
@@ -94,29 +89,19 @@ namespace ctgl {
             return T{};
         }
 
-        template <typename T, typename F, typename... Ts, typename = detail::enable_if_different_t<T, F>>
-        constexpr size_t find(T, List<F, Ts...>, size_t index) noexcept {
-            return find(T{}, List<Ts...>{}, index+1);
+        template <typename T, typename... Ts>
+        constexpr bool contains(T, List<T, Ts...>) noexcept {
+            return true;
         }
 
-        template <typename T, typename... Ts>
-        constexpr size_t find(T, List<T, Ts...>, size_t index) noexcept {
-            return index;
+        template <typename T, typename F, typename... Ts>
+        constexpr bool contains(T, List<F, Ts...>) noexcept {
+            return contains(T{}, List<Ts...>{});
         }
 
         template <typename T>
-        constexpr size_t find(T, List<>, size_t) noexcept {
-            return DNE;
-        }
-
-        template <typename T, typename... Ts>
-        constexpr size_t find(T, List<Ts...>) noexcept {
-            return find(T{}, List<Ts...>{}, 0);
-        }
-
-        template <typename T, typename... Ts>
-        constexpr bool contains(T, List<Ts...>) noexcept {
-            return find(T{}, List<Ts...>{}) != DNE;
+        constexpr bool contains(T, List<>) noexcept {
+            return false;
         }
 
         template <typename T, typename... Ts>

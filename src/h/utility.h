@@ -5,7 +5,7 @@
 // CTGL Constants
 // -----------------------------------------------------------------------------
 namespace ctgl {
-    // An invalid distance (e.g., the distance between two disconnected nodes).
+    // INF represents an invalid distance (e.g., the distance between two disconnected nodes).
     constexpr int INF = std::numeric_limits<int>::max();
 }
 

@@ -12,13 +12,24 @@ namespace ctgl {
         template <typename... Es>
         using Path = ctgl::List<Es...>;
 
+        // DNE represents an invalid Path (e.g., the path between two disconnected nodes).
+        namespace { struct invalid; }
+        constexpr auto DNE = Path<invalid>{};
+
         // Calculates the length of the given Path.
         template <typename... Es>
-        constexpr int length(Path<Es...>) noexcept ;
+        constexpr int length(Path<Es...>) noexcept;
 
         // Finds the unique Nodes in the given Path.
         template <typename... Es>
-        constexpr auto nodes(Path<Es...>) noexcept ;
+        constexpr auto nodes(Path<Es...>) noexcept;
+
+        // Drops all Edges prior to the given Node in the provided Path.
+        template <typename T, typename... Es>
+        constexpr auto drop(T, Path<Es...>) noexcept;
+
+        template <typename T>
+        constexpr auto drop(T, Path<>) noexcept;
     }
 
     // Definitions
@@ -37,12 +48,27 @@ namespace ctgl {
 
         template <typename E, typename... Es>
         constexpr auto nodes(Path<E, Es...>) noexcept {
-            return list::unique(List<typename E::From, typename E::To>{} + nodes(Path<Es...>{}));
+            return list::unique(List<typename E::Tail, typename E::Head>{} + nodes(Path<Es...>{}));
         }
 
         template<>
         constexpr auto nodes(Path<>) noexcept {
             return List<>{};
+        }
+
+        template <typename T, typename E, typename... Es>
+        constexpr auto drop(T, Path<E, Es...>) noexcept {\
+            constexpr bool match = std::is_same<T, typename E::Tail>::value;
+            if constexpr (match) {
+                return Path<E, Es...>{};
+            } else {
+                return drop(T{}, Path<Es...>{});
+            }
+        }
+
+        template <typename T>
+        constexpr auto drop(T, Path<>) noexcept {
+            return Path<>{};
         }
     }
 

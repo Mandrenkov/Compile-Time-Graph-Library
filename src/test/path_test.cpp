@@ -11,6 +11,9 @@ using namespace ctgl;
 template <typename... Es>
 using NodesType = decltype(path::nodes(Path<Es...>{}));
 
+template <typename T, typename P>
+using DropType = decltype(path::drop(T{}, P{}));
+
 
 // Unit Tests
 // -----------------------------------------------------------------------------
@@ -43,4 +46,21 @@ TEST(PathTest, Nodes) {
     EXPECT_TRUE((std::is_same<NodesType<forge::E12>, List<forge::N1, forge::N2>>::value));
     EXPECT_TRUE((std::is_same<NodesType<forge::E21>, List<forge::N2, forge::N1>>::value));
     EXPECT_TRUE((std::is_same<NodesType<forge::E12, forge::E23>, List<forge::N1, forge::N2, forge::N3>>::value));
+}
+
+// Tests for the drop() function.
+TEST(PathTest, Drop) {
+    // Empty
+    EXPECT_TRUE((std::is_same<DropType<forge::N1, Path<>>, Path<>>::value));
+
+    // Single
+    EXPECT_TRUE((std::is_same<DropType<forge::N1, Path<forge::E23>>, Path<>>::value));
+    EXPECT_TRUE((std::is_same<DropType<forge::N2, Path<forge::E23>>, Path<forge::E23>>::value));
+    EXPECT_TRUE((std::is_same<DropType<forge::N3, Path<forge::E23>>, Path<>>::value));
+
+    // Multiple
+    EXPECT_TRUE((std::is_same<DropType<forge::N1, Path<forge::E23, forge::E34>>, Path<>>::value));
+    EXPECT_TRUE((std::is_same<DropType<forge::N2, Path<forge::E12, forge::E23>>, Path<forge::E23>>::value));
+    EXPECT_TRUE((std::is_same<DropType<forge::N3, Path<forge::E34, forge::E41>>, Path<forge::E34, forge::E41>>::value));
+    EXPECT_TRUE((std::is_same<DropType<forge::N4, Path<forge::E34, forge::E41, forge::E23>>, Path<forge::E41, forge::E23>>::value));
 }

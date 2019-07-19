@@ -4,12 +4,7 @@
 #include "forge.h"
 
 using namespace ctgl;
-
-
-// Convenient Type Aliases
-// -----------------------------------------------------------------------------
-template <typename G, typename S, typename T>
-using ShortestType = decltype(shortest(G{}, S{}, T{}));
+using namespace forge;
 
 
 // Unit Tests
@@ -17,103 +12,103 @@ using ShortestType = decltype(shortest(G{}, S{}, T{}));
 // Tests for the distance() function.
 TEST(AlgorithmTest, Distance) {
     // Empty
-    EXPECT_EQ(distance(forge::Empty{}, forge::N1{}, forge::N1{}), INF);
-    EXPECT_EQ(distance(forge::Empty{}, forge::N1{}, forge::N2{}), INF);
+    EXPECT_EQ(distance(Empty{}, N1{}, N1{}), INF);
+    EXPECT_EQ(distance(Empty{}, N1{}, N2{}), INF);
 
     // Island
-    EXPECT_EQ(distance(forge::Island{}, forge::N1{}, forge::N1{}), 0);
-    EXPECT_EQ(distance(forge::Island{}, forge::N1{}, forge::N2{}), INF);
-    EXPECT_EQ(distance(forge::Island{}, forge::N2{}, forge::N1{}), INF);
+    EXPECT_EQ(distance(Island{}, N1{}, N1{}), 0);
+    EXPECT_EQ(distance(Island{}, N1{}, N2{}), INF);
+    EXPECT_EQ(distance(Island{}, N2{}, N1{}), INF);
 
     // Loopback
-    EXPECT_EQ(distance(forge::Loopback{}, forge::N1{}, forge::N1{}), 0);
+    EXPECT_EQ(distance(Loopback{}, N1{}, N1{}), 0);
 
     // Arrow
-    EXPECT_EQ(distance(forge::Arrow{}, forge::N1{}, forge::N2{}), 2);
-    EXPECT_EQ(distance(forge::Arrow{}, forge::N2{}, forge::N1{}), INF);
+    EXPECT_EQ(distance(Arrow{}, N1{}, N2{}), 2);
+    EXPECT_EQ(distance(Arrow{}, N2{}, N1{}), INF);
 
     // Bridge
-    EXPECT_EQ(distance(forge::Bridge{}, forge::N1{}, forge::N2{}), 2);
-    EXPECT_EQ(distance(forge::Bridge{}, forge::N2{}, forge::N1{}), 4);
+    EXPECT_EQ(distance(Bridge{}, N1{}, N2{}), 2);
+    EXPECT_EQ(distance(Bridge{}, N2{}, N1{}), 4);
 
     // Pan
-    EXPECT_EQ(distance(forge::Pan{}, forge::N1{}, forge::N1{}), 0);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N1{}, forge::N2{}), 2);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N1{}, forge::N3{}), 4);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N1{}, forge::N4{}), 4);
+    EXPECT_EQ(distance(Pan{}, N1{}, N1{}), 0);
+    EXPECT_EQ(distance(Pan{}, N1{}, N2{}), 2);
+    EXPECT_EQ(distance(Pan{}, N1{}, N3{}), 4);
+    EXPECT_EQ(distance(Pan{}, N1{}, N4{}), 4);
 
-    EXPECT_EQ(distance(forge::Pan{}, forge::N2{}, forge::N1{}), INF);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N2{}, forge::N2{}), 0);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N2{}, forge::N3{}), 2);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N2{}, forge::N4{}), INF);
+    EXPECT_EQ(distance(Pan{}, N2{}, N1{}), INF);
+    EXPECT_EQ(distance(Pan{}, N2{}, N2{}), 0);
+    EXPECT_EQ(distance(Pan{}, N2{}, N3{}), 2);
+    EXPECT_EQ(distance(Pan{}, N2{}, N4{}), INF);
 
-    EXPECT_EQ(distance(forge::Pan{}, forge::N3{}, forge::N1{}), INF);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N3{}, forge::N2{}), INF);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N3{}, forge::N3{}), 0);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N3{}, forge::N4{}), INF);
+    EXPECT_EQ(distance(Pan{}, N3{}, N1{}), INF);
+    EXPECT_EQ(distance(Pan{}, N3{}, N2{}), INF);
+    EXPECT_EQ(distance(Pan{}, N3{}, N3{}), 0);
+    EXPECT_EQ(distance(Pan{}, N3{}, N4{}), INF);
 
-    EXPECT_EQ(distance(forge::Pan{}, forge::N4{}, forge::N1{}), INF);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N4{}, forge::N2{}), 3);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N4{}, forge::N3{}), 5);
-    EXPECT_EQ(distance(forge::Pan{}, forge::N4{}, forge::N4{}), 0);
+    EXPECT_EQ(distance(Pan{}, N4{}, N1{}), INF);
+    EXPECT_EQ(distance(Pan{}, N4{}, N2{}), 3);
+    EXPECT_EQ(distance(Pan{}, N4{}, N3{}), 5);
+    EXPECT_EQ(distance(Pan{}, N4{}, N4{}), 0);
 
     // Bow
-    EXPECT_EQ(distance(forge::Bow{}, forge::N5{}, forge::N6{}), 2);
-    EXPECT_EQ(distance(forge::Bow{}, forge::N5{}, forge::N7{}), 1);
-    EXPECT_EQ(distance(forge::Bow{}, forge::N6{}, forge::N5{}), INF);
-    EXPECT_EQ(distance(forge::Bow{}, forge::N6{}, forge::N7{}), INF);
-    EXPECT_EQ(distance(forge::Bow{}, forge::N7{}, forge::N5{}), INF);
-    EXPECT_EQ(distance(forge::Bow{}, forge::N7{}, forge::N6{}), 1);
+    EXPECT_EQ(distance(Bow{}, N5{}, N6{}), 2);
+    EXPECT_EQ(distance(Bow{}, N5{}, N7{}), 1);
+    EXPECT_EQ(distance(Bow{}, N6{}, N5{}), INF);
+    EXPECT_EQ(distance(Bow{}, N6{}, N7{}), INF);
+    EXPECT_EQ(distance(Bow{}, N7{}, N5{}), INF);
+    EXPECT_EQ(distance(Bow{}, N7{}, N6{}), 1);
 }
 
 // Tests for the shortest() function.
 TEST(AlgorithmTest, Shortest) {
     // Empty
-    EXPECT_EQ(shortest(forge::Empty{}, forge::N1{}, forge::N1{}), path::DNE);
-    EXPECT_EQ(shortest(forge::Empty{}, forge::N1{}, forge::N2{}), path::DNE);
+    EXPECT_EQ(shortest(Empty{}, N1{}, N1{}), path::DNE);
+    EXPECT_EQ(shortest(Empty{}, N1{}, N2{}), path::DNE);
 
     // Island
-    EXPECT_EQ(shortest(forge::Island{}, forge::N1{}, forge::N1{}), Path<>{});
-    EXPECT_EQ(shortest(forge::Island{}, forge::N1{}, forge::N2{}), path::DNE);
-    EXPECT_EQ(shortest(forge::Island{}, forge::N2{}, forge::N1{}), path::DNE);
+    EXPECT_EQ(shortest(Island{}, N1{}, N1{}), Path<>{});
+    EXPECT_EQ(shortest(Island{}, N1{}, N2{}), path::DNE);
+    EXPECT_EQ(shortest(Island{}, N2{}, N1{}), path::DNE);
 
     // Loopback
-    EXPECT_EQ(shortest(forge::Loopback{}, forge::N1{}, forge::N1{}), Path<>{});
+    EXPECT_EQ(shortest(Loopback{}, N1{}, N1{}), Path<>{});
 
     // Arrow
-    EXPECT_EQ(shortest(forge::Arrow{}, forge::N1{}, forge::N2{}), Path<forge::E12>{});
-    EXPECT_EQ(shortest(forge::Arrow{}, forge::N2{}, forge::N1{}), path::DNE);
+    EXPECT_EQ(shortest(Arrow{}, N1{}, N2{}), Path<E12>{});
+    EXPECT_EQ(shortest(Arrow{}, N2{}, N1{}), path::DNE);
 
     // Bridge
-    EXPECT_EQ(shortest(forge::Bridge{}, forge::N1{}, forge::N2{}), Path<forge::E12>{});
-    EXPECT_EQ(shortest(forge::Bridge{}, forge::N2{}, forge::N1{}), Path<forge::E21>{});
+    EXPECT_EQ(shortest(Bridge{}, N1{}, N2{}), Path<E12>{});
+    EXPECT_EQ(shortest(Bridge{}, N2{}, N1{}), Path<E21>{});
 
     // Pan
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N1{}, forge::N1{}), Path<>{});
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N1{}, forge::N2{}), Path<forge::E12>{});
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N1{}, forge::N3{}), (Path<forge::E12, forge::E23>{}));
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N1{}, forge::N4{}), Path<forge::E14>{});
+    EXPECT_EQ(shortest(Pan{}, N1{}, N1{}), Path<>{});
+    EXPECT_EQ(shortest(Pan{}, N1{}, N2{}), Path<E12>{});
+    EXPECT_EQ(shortest(Pan{}, N1{}, N3{}), (Path<E12, E23>{}));
+    EXPECT_EQ(shortest(Pan{}, N1{}, N4{}), Path<E14>{});
 
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N2{}, forge::N1{}), path::DNE);
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N2{}, forge::N2{}), Path<>{});
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N2{}, forge::N3{}), Path<forge::E23>{});
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N2{}, forge::N4{}), path::DNE);
+    EXPECT_EQ(shortest(Pan{}, N2{}, N1{}), path::DNE);
+    EXPECT_EQ(shortest(Pan{}, N2{}, N2{}), Path<>{});
+    EXPECT_EQ(shortest(Pan{}, N2{}, N3{}), Path<E23>{});
+    EXPECT_EQ(shortest(Pan{}, N2{}, N4{}), path::DNE);
 
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N3{}, forge::N1{}), path::DNE);
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N3{}, forge::N2{}), path::DNE);
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N3{}, forge::N3{}), Path<>{});
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N3{}, forge::N4{}), path::DNE);
+    EXPECT_EQ(shortest(Pan{}, N3{}, N1{}), path::DNE);
+    EXPECT_EQ(shortest(Pan{}, N3{}, N2{}), path::DNE);
+    EXPECT_EQ(shortest(Pan{}, N3{}, N3{}), Path<>{});
+    EXPECT_EQ(shortest(Pan{}, N3{}, N4{}), path::DNE);
 
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N4{}, forge::N1{}), path::DNE);
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N4{}, forge::N2{}), Path<forge::E42>{});
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N4{}, forge::N3{}), (Path<forge::E42, forge::E23>{}));
-    EXPECT_EQ(shortest(forge::Pan{}, forge::N4{}, forge::N4{}), Path<>{});
+    EXPECT_EQ(shortest(Pan{}, N4{}, N1{}), path::DNE);
+    EXPECT_EQ(shortest(Pan{}, N4{}, N2{}), Path<E42>{});
+    EXPECT_EQ(shortest(Pan{}, N4{}, N3{}), (Path<E42, E23>{}));
+    EXPECT_EQ(shortest(Pan{}, N4{}, N4{}), Path<>{});
 
     // Bow
-    EXPECT_EQ(shortest(forge::Bow{}, forge::N5{}, forge::N6{}), (Path<forge::E57, forge::E76>{}));
-    EXPECT_EQ(shortest(forge::Bow{}, forge::N5{}, forge::N7{}), Path<forge::E57>{});
-    EXPECT_EQ(shortest(forge::Bow{}, forge::N6{}, forge::N5{}), path::DNE);
-    EXPECT_EQ(shortest(forge::Bow{}, forge::N6{}, forge::N7{}), path::DNE);
-    EXPECT_EQ(shortest(forge::Bow{}, forge::N7{}, forge::N5{}), path::DNE);
-    EXPECT_EQ(shortest(forge::Bow{}, forge::N7{}, forge::N6{}), Path<forge::E76>{});
+    EXPECT_EQ(shortest(Bow{}, N5{}, N6{}), (Path<E57, E76>{}));
+    EXPECT_EQ(shortest(Bow{}, N5{}, N7{}), Path<E57>{});
+    EXPECT_EQ(shortest(Bow{}, N6{}, N5{}), path::DNE);
+    EXPECT_EQ(shortest(Bow{}, N6{}, N7{}), path::DNE);
+    EXPECT_EQ(shortest(Bow{}, N7{}, N5{}), path::DNE);
+    EXPECT_EQ(shortest(Bow{}, N7{}, N6{}), Path<E76>{});
 }

@@ -13,7 +13,7 @@ namespace ctgl {
         using Path = ctgl::List<Es...>;
 
         // DNE represents an invalid Path (e.g., the path between two disconnected nodes).
-        namespace { struct invalid; }
+        namespace { struct invalid{}; }
         constexpr auto DNE = Path<invalid>{};
 
         // Calculates the length of the given Path.

@@ -9,6 +9,9 @@ namespace forge {
     using N2 = Node<2>;
     using N3 = Node<3>;
     using N4 = Node<4>;
+    using N5 = Node<5>;
+    using N6 = Node<6>;
+    using N7 = Node<7>;
 
     // Edges
     // -------------------------------------------------------------------------
@@ -32,9 +35,12 @@ namespace forge {
     using E43 = Edge<N4, N3, 4>;
     using E44 = Edge<N4, N4, 1>;
 
+    using E56 = Edge<N5, N6, 3>;
+    using E57 = Edge<N5, N7, 1>;
+    using E76 = Edge<N7, N6, 1>;
+
     // Graphs
     // -------------------------------------------------------------------------
-    //
     using Empty = Graph<List<>, List<>>;
 
     // (N1)
@@ -62,4 +68,8 @@ namespace forge {
     // (N1) ------> (N2) --> (N3)
     //  '--> (N4) ---^
     using Pan = Graph<List<N1, N2, N3, N4>, List<E12, E23, E14, E42>>;
+
+    // (N5) ------> (N6)
+    //  '--> (N7) ---^
+    using Bow = Graph<List<N5, N6, N7>, List<E56, E57, E76>>;
 }

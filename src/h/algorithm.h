@@ -51,11 +51,11 @@ namespace ctgl {
             // |             |-------------+     +------+
             // |             | take <= x   | --> | take |
             // +-------------+-------------+     +------+
-            if constexpr (skip == path::DNE && take == path::DNE) {
-                return path::DNE;
-            } else if constexpr (skip == path::DNE) {
+            if constexpr (skip == DNE && take == DNE) {
+                return DNE;
+            } else if constexpr (skip == DNE) {
                 return take;
-            } else if constexpr (take == path::DNE) {
+            } else if constexpr (take == DNE) {
                 return skip;
             } else if constexpr (path::length(skip) <= path::length(take)) {
                 return skip;
@@ -74,7 +74,7 @@ namespace ctgl {
         constexpr auto shortest(ADL, G, S, T, List<>, List<Es...>) noexcept {
             // The source Node |S| differs from the target Node |T| and all Edges
             // from |S| have been traversed.
-            return path::DNE;
+            return DNE;
         }
     }
 
@@ -87,7 +87,7 @@ namespace ctgl {
         constexpr bool memberT = list::contains(T{}, nodes);
         constexpr bool feasible = memberS && memberT;
         if constexpr (!feasible) {
-            return path::DNE;
+            return DNE;
         } else {
             constexpr auto next = graph::outgoing(G{}, S{});
             return detail::shortest(detail::ADL{}, G{}, S{}, T{}, next, List<>{});
@@ -101,7 +101,7 @@ namespace ctgl {
     template <typename G, typename S, typename T>
     constexpr int distance(G, S, T) noexcept {
         constexpr auto journey = ctgl::shortest(G{}, S{}, T{});
-        if constexpr (journey == path::DNE) {
+        if constexpr (journey == DNE) {
             return INF;
         } else {
             return path::length(journey);

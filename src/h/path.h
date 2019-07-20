@@ -12,10 +12,6 @@ namespace ctgl {
         template <typename... Es>
         using Path = ctgl::List<Es...>;
 
-        // DNE represents an invalid Path (e.g., the path between two disconnected nodes).
-        namespace { struct invalid{}; }
-        constexpr auto DNE = Path<invalid>{};
-
         // Calculates the length of the given Path.
         template <typename... Es>
         constexpr int length(Path<Es...>) noexcept;
@@ -76,4 +72,8 @@ namespace ctgl {
     // -------------------------------------------------------------------------
     template <typename... Es>
     using Path = ctgl::path::Path<Es...>;
+
+    // DNE represents an invalid Path (e.g., the path between two disconnected nodes).
+    namespace { struct invalid{}; }
+    constexpr auto DNE = Path<invalid>{};
 }

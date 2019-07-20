@@ -10,7 +10,7 @@ matrix:
 
     # Clang 7.0
     - os: linux
-      env: MATRIX_EVAL="CC=clang && CXX=clang++"
+      env: MATRIX_EVAL="CC=clang && CXX=/usr/local/clang-7.0.0/bin/clang++"
       compiler: clang
 
 # Install Google Test

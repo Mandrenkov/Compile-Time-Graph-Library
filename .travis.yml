@@ -10,14 +10,13 @@ matrix:
 
     # Clang 7.0
     - os: linux
-      env: MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
+      env: MATRIX_EVAL="CC=clang && CXX=clang++"
       compiler: clang
 
 # Install Google Test
 before_install:
-  - which clang
-  - which clang++
-  - which clang++-7.0
+  - which g++-7
+  - which g++
   - eval "${MATRIX_EVAL}"
   - sudo apt-get install -y libgtest-dev cmake
   - sudo wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz

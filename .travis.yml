@@ -10,15 +10,14 @@ matrix:
 
     - name: "Clang"
       os: linux
-      env: MATRIX_EVAL="CC=clang && CXX=/usr/local/clang-7.0.0/bin/clang++"
+      env: MATRIX_EVAL="CC=clang && CXX=clang++"
       compiler: clang
 
 # Install Google Test
 before_install:
   - eval "${MATRIX_EVAL}"
-  - echo "PATH = $PATH"
-  - sudo cp `which clang` /usr/bin/clang
-  - sudo cp `which clang++` /usr/bin/clang++
+  - sudo ln -s /usr/bin/clang `which clang`
+  - sudo ln -s /usr/bin/clang++ `which clang++`
   - sudo apt-get install -y libgtest-dev cmake
   - sudo wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz
   - sudo tar xf release-1.7.0.tar.gz

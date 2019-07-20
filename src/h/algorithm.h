@@ -21,7 +21,7 @@ namespace ctgl {
     // Implementation of shortest().
     // -------------------------------------------------------------------------
     namespace detail {
-        template <typename G, typename S, typename T, typename E, typename... Es, typename... Ps, typename = enable_if_different_t<S, T>>
+        template <typename G, typename S, typename T, typename E, typename... Es, typename... Ps, typename = enable_if_diff_t<S, T>>
         constexpr auto shortest(ADL, G, S, T, List<E, Es...>, List<Ps...>) noexcept {
             // Compute the shortest path that ignores the current Edge.
             constexpr auto skip = shortest(ADL{}, G{}, S{}, T{}, List<Es...>{}, List<Ps...>{});
@@ -70,7 +70,7 @@ namespace ctgl {
             return List<Es...>{};
         }
 
-        template <typename G, typename S, typename T, typename... Es, typename = enable_if_different_t<S, T>>
+        template <typename G, typename S, typename T, typename... Es, typename = enable_if_diff_t<S, T>>
         constexpr auto shortest(ADL, G, S, T, List<>, List<Es...>) noexcept {
             // The source Node |S| differs from the target Node |T| and all Edges
             // from |S| have been traversed.

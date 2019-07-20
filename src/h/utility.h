@@ -23,6 +23,6 @@ namespace ctgl {
 
         // Type that does not compile if |T| is the same as |U|.
         template <typename T, typename U>
-        using enable_if_different_t = std::enable_if_t<!std::is_same_v<T, U>>;
+        using enable_if_diff_t = std::enable_if_t<!std::is_same_v<T, U>>;
     }
 }

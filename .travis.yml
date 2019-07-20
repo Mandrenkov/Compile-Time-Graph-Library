@@ -15,6 +15,10 @@ matrix:
 
 # Install Google Test
 before_install:
+  - which clang
+  - which clang-7.0
+  - which clang++-7.0
+  - which clang++
   - eval "${MATRIX_EVAL}"
   - sudo apt-get install -y libgtest-dev cmake
   - sudo wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz

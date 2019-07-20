@@ -3,14 +3,14 @@ dist: bionic
 
 matrix:
   include:
-    # GCC 7
-    - os: linux
+    - name: "GCC"
+      os: linux
       env: MATRIX_EVAL="CC=gcc && CXX=g++"
       compiler: gcc
 
-    # Clang 7.0
-    - os: linux
-      env: MATRIX_EVAL="CC=clang && CXX=/usr/local/clang-7.0.0/bin/clang++"
+    - name: "Clang"
+      os: linux
+      env: MATRIX_EVAL="CC=/usr/local/clang-7.0.0/bin/clang && CXX=/usr/local/clang-7.0.0/bin/clang++"
       compiler: clang
 
 # Install Google Test

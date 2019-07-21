@@ -57,6 +57,28 @@ TEST(AlgorithmTest, FindDistance) {
     EXPECT_EQ(algorithm::findDistance(Bow{}, N6{}, N7{}), INF);
     EXPECT_EQ(algorithm::findDistance(Bow{}, N7{}, N5{}), INF);
     EXPECT_EQ(algorithm::findDistance(Bow{}, N7{}, N6{}), 1);
+
+    // Alone
+    EXPECT_EQ(algorithm::findDistance(Alone{}, N1{}, N1{}), 0);
+
+    // Debate
+    EXPECT_EQ(algorithm::findDistance(Debate{}, N1{}, N1{}), 0);
+    EXPECT_EQ(algorithm::findDistance(Debate{}, N1{}, N2{}), -2);
+    EXPECT_EQ(algorithm::findDistance(Debate{}, N2{}, N2{}), 0);
+    EXPECT_EQ(algorithm::findDistance(Debate{}, N2{}, N1{}), -2);
+
+    // Spiral
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N1{}, N1{}), 0);
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N1{}, N2{}), -2);
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N1{}, N3{}), -3);
+
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N2{}, N1{}), -4);
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N2{}, N2{}), 0);
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N2{}, N3{}), -1);
+
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N3{}, N1{}), -3);
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N3{}, N2{}), -5);
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N3{}, N3{}), 0);
 }
 
 // Unit tests for the ctgl::algorithm::findShortestPath() function.
@@ -109,4 +131,26 @@ TEST(AlgorithmTest, FindShortestPath) {
     EXPECT_EQ(algorithm::findShortestPath(Bow{}, N6{}, N7{}), path::DNE);
     EXPECT_EQ(algorithm::findShortestPath(Bow{}, N7{}, N5{}), path::DNE);
     EXPECT_EQ(algorithm::findShortestPath(Bow{}, N7{}, N6{}), Path<E76>{});
+
+    // Alone
+    EXPECT_EQ(algorithm::findShortestPath(Alone{}, N1{}, N1{}), Path<>{});
+
+    // Debate
+    EXPECT_EQ(algorithm::findShortestPath(Debate{}, N1{}, N1{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestPath(Debate{}, N1{}, N2{}), Path<NE12>{});
+    EXPECT_EQ(algorithm::findShortestPath(Debate{}, N2{}, N2{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestPath(Debate{}, N2{}, N1{}), Path<NE21>{});
+
+    // Spiral
+    EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N1{}, N1{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N1{}, N2{}), Path<NE12>{});
+    EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N1{}, N3{}), (Path<NE12, NE23>{}));
+
+    EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N2{}, N1{}), (Path<NE23, NE31>{}));
+    EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N2{}, N2{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N2{}, N3{}), Path<NE23>{});
+
+    EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N3{}, N1{}), Path<NE31>{});
+    EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N3{}, N2{}), (Path<NE31, NE12>{}));
+    EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N3{}, N3{}), Path<>{});
 }

@@ -16,8 +16,8 @@ namespace ctgl {
         };
 
         // Edge represents a directed edge from the tail Node |T| to the head
-        // Node |H| with positive weight |W|.
-        template<typename T, typename H, int W = 1, typename = std::enable_if_t<W >= 0>>
+        // Node |H| with weight |W|.
+        template<typename T, typename H, int W>
         struct Edge {
             using Tail = T;
             using Head = H;

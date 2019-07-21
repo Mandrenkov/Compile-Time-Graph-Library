@@ -25,7 +25,7 @@ int main() {
     using graph = ctgl::Graph<nodes, edges>;
 
     // Find the distance between Node 1 and Node 3 (i.e., 8).
-    constexpr int dist = ctgl::distance(graph{}, n1{}, n3{});
+    constexpr int dist = ctgl::algorithm::findDistance(graph{}, n1{}, n3{});
     std::cout << "The distance between Node 1 and Node 3 is " << dist << ".\n";
 
     std::cout << "\nDone.\n";

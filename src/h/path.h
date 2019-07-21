@@ -26,10 +26,10 @@ namespace ctgl {
 
         // Drops all Edges prior to the given Node in the provided Path.
         template <typename T, typename... Es>
-        constexpr auto drop(T, Path<Es...>) noexcept;
+        constexpr auto dropPrefix(T, Path<Es...>) noexcept;
 
         template <typename T>
-        constexpr auto drop(T, Path<>) noexcept;
+        constexpr auto dropPrefix(T, Path<>) noexcept;
     }
 
     // Definitions
@@ -57,17 +57,17 @@ namespace ctgl {
         }
 
         template <typename T, typename E, typename... Es>
-        constexpr auto drop(T, Path<E, Es...>) noexcept {\
+        constexpr auto dropPrefix(T, Path<E, Es...>) noexcept {\
             constexpr bool match = std::is_same<T, typename E::Tail>::value;
             if constexpr (match) {
                 return Path<E, Es...>{};
             } else {
-                return drop(T{}, Path<Es...>{});
+                return dropPrefix(T{}, Path<Es...>{});
             }
         }
 
         template <typename T>
-        constexpr auto drop(T, Path<>) noexcept {
+        constexpr auto dropPrefix(T, Path<>) noexcept {
             return Path<>{};
         }
     }

@@ -37,19 +37,19 @@ TEST(PathTest, Nodes) {
     EXPECT_EQ(path::nodes(Path<E12, E23>{}), (List<N1, N2, N3>{}));
 }
 
-// Unit tests for the ctgl::path::drop() function.
-TEST(PathTest, Drop) {
+// Unit tests for the ctgl::path::dropPrefix() function.
+TEST(PathTest, DropPrefix) {
     // Empty
-    EXPECT_EQ(path::drop(N1{}, Path<>{}), Path<>{});
+    EXPECT_EQ(path::dropPrefix(N1{}, Path<>{}), Path<>{});
 
     // Single
-    EXPECT_EQ(path::drop(N1{}, Path<E23>{}), Path<>{});
-    EXPECT_EQ(path::drop(N2{}, Path<E23>{}), Path<E23>{});
-    EXPECT_EQ(path::drop(N3{}, Path<E23>{}), Path<>{});
+    EXPECT_EQ(path::dropPrefix(N1{}, Path<E23>{}), Path<>{});
+    EXPECT_EQ(path::dropPrefix(N2{}, Path<E23>{}), Path<E23>{});
+    EXPECT_EQ(path::dropPrefix(N3{}, Path<E23>{}), Path<>{});
 
     // Multiple
-    EXPECT_EQ(path::drop(N1{}, Path<E23, E34>{}), Path<>{});
-    EXPECT_EQ(path::drop(N2{}, Path<E12, E23>{}), Path<E23>{});
-    EXPECT_EQ(path::drop(N3{}, Path<E34, E41>{}), (Path<E34, E41>{}));
-    EXPECT_EQ(path::drop(N4{}, Path<E34, E41, E23>{}), (Path<E41, E23>{}));
+    EXPECT_EQ(path::dropPrefix(N1{}, Path<E23, E34>{}), Path<>{});
+    EXPECT_EQ(path::dropPrefix(N2{}, Path<E12, E23>{}), Path<E23>{});
+    EXPECT_EQ(path::dropPrefix(N3{}, Path<E34, E41>{}), (Path<E34, E41>{}));
+    EXPECT_EQ(path::dropPrefix(N4{}, Path<E34, E41, E23>{}), (Path<E41, E23>{}));
 }

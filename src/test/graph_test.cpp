@@ -1,98 +1,85 @@
+#include <iostream>
+
 #include <gtest/gtest.h>
 
 #include "../h/graph.h"
 #include "forge.h"
 
-#include <iostream>
-
 using namespace ctgl;
+using namespace forge;
 
-
-// Convenient Type Aliases
-// -----------------------------------------------------------------------------
-template <typename G, typename N>
-using AdjacentType = decltype(graph::adjacent(G{}, N{}));
-
-template <typename G, typename N>
-using ConnectedType = decltype(graph::connected(G{}, N{}));
-
-template <typename G, typename N>
-using OutgoingType = decltype(graph::outgoing(G{}, N{}));
-
-// Unit Tests
-// -----------------------------------------------------------------------------
-// Tests for the adjacent() function.
+// Unit tests for the ctgl::graph::adjacent() function.
 TEST(GraphTest, Adjacent) {
     // Empty
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Empty, forge::N1>, List<>>::value));
+    EXPECT_EQ(adjacent(Empty{}, N1{}), List<>{});
 
     // Island
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Island, forge::N1>, List<>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Island, forge::N2>, List<>>::value));
+    EXPECT_EQ(adjacent(Island{}, N1{}), List<>{});
+    EXPECT_EQ(adjacent(Island{}, N2{}), List<>{});
 
     // Loopback
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Loopback, forge::N1>, List<forge::N1>>::value));
+    EXPECT_EQ(adjacent(Loopback{}, N1{}), List<N1>{});
 
     // Arrow
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Arrow, forge::N1>, List<forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Arrow, forge::N2>, List<>>::value));
+    EXPECT_EQ(adjacent(Arrow{}, N1{}), List<N2>{});
+    EXPECT_EQ(adjacent(Arrow{}, N2{}), List<>{});
 
     // Bridge
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Bridge, forge::N1>, List<forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Bridge, forge::N2>, List<forge::N1>>::value));
+    EXPECT_EQ(adjacent(Bridge{}, N1{}), List<N2>{});
+    EXPECT_EQ(adjacent(Bridge{}, N2{}), List<N1>{});
 
     // Leap
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Leap, forge::N1>, List<forge::N2, forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Leap, forge::N2>, List<forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Leap, forge::N3>, List<>>::value));
+    EXPECT_EQ(adjacent(Leap{}, N1{}), (List<N2, N3>{}));
+    EXPECT_EQ(adjacent(Leap{}, N2{}), List<N3>{});
+    EXPECT_EQ(adjacent(Leap{}, N3{}), List<>{});
 }
 
-// Tests for the connected() function.
+// Unit tests for the ctgl::graph::connected() function.
 TEST(GraphTest, Connected) {
     // Empty
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Empty, forge::N1>, List<>>::value));
+    EXPECT_EQ(connected(Empty{}, N1{}), List<>{});
 
     // Island
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Island, forge::N1>, List<forge::N1>>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Island, forge::N2>, List<>>::value));
+    EXPECT_EQ(connected(Island{}, N1{}), List<N1>{});
+    EXPECT_EQ(connected(Island{}, N2{}), List<>{});
 
     // Loopback
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Loopback, forge::N1>, List<forge::N1>>::value));
+    EXPECT_EQ(connected(Loopback{}, N1{}), List<N1>{});
 
     // Pan
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N1>, List<forge::N4, forge::N3, forge::N2, forge::N1>>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N2>, List<forge::N3, forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N3>, List<forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N4>, List<forge::N3, forge::N2, forge::N4>>::value));
+    EXPECT_EQ(connected(Pan{}, N1{}), (List<N4, N3, N2, N1>{}));
+    EXPECT_EQ(connected(Pan{}, N2{}), (List<N3, N2>{}));
+    EXPECT_EQ(connected(Pan{}, N3{}), List<N3>{});
+    EXPECT_EQ(connected(Pan{}, N4{}), (List<N3, N2, N4>{}));
 
     // Triangle
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Triangle, forge::N1>, List<forge::N3, forge::N2, forge::N1>>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Triangle, forge::N2>, List<forge::N1, forge::N3, forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Triangle, forge::N3>, List<forge::N2, forge::N1, forge::N3>>::value));
+    EXPECT_EQ(connected(Triangle{}, N1{}), (List<N3, N2, N1>{}));
+    EXPECT_EQ(connected(Triangle{}, N2{}), (List<N1, N3, N2>{}));
+    EXPECT_EQ(connected(Triangle{}, N3{}), (List<N2, N1, N3>{}));
 }
 
-// Tests for the outgoing() function.
+// Unit tests for the ctgl::graph::outgoing() function.
 TEST(GraphTest, Outgoing) {
     // Empty
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Empty, forge::N1>, List<>>::value));
+    EXPECT_EQ(outgoing(Empty{}, N1{}), List<>{});
 
     // Island
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Empty, forge::N1>, List<>>::value));
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Empty, forge::N2>, List<>>::value));
+    EXPECT_EQ(outgoing(Empty{}, N1{}), List<>{});
+    EXPECT_EQ(outgoing(Empty{}, N2{}), List<>{});
 
     // Loopback
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Loopback, forge::N1>, List<forge::E11>>::value));
+    EXPECT_EQ(outgoing(Loopback{}, N1{}), List<E11>{});
 
     // Arrow
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Arrow, forge::N1>, List<forge::E12>>::value));
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Arrow, forge::N2>, List<>>::value));
+    EXPECT_EQ(outgoing(Arrow{}, N1{}), List<E12>{});
+    EXPECT_EQ(outgoing(Arrow{}, N2{}), List<>{});
 
     // Bridge
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Bridge, forge::N1>, List<forge::E12>>::value));
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Bridge, forge::N2>, List<forge::E21>>::value));
+    EXPECT_EQ(outgoing(Bridge{}, N1{}), List<E12>{});
+    EXPECT_EQ(outgoing(Bridge{}, N2{}), List<E21>{});
 
     // Leap
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Leap, forge::N1>, List<forge::E12, forge::E13>>::value));
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Leap, forge::N2>, List<forge::E23>>::value));
-    EXPECT_TRUE((std::is_same<OutgoingType<forge::Leap, forge::N3>, List<>>::value));
+    EXPECT_EQ(outgoing(Leap{}, N1{}), (List<E12, E13>{}));
+    EXPECT_EQ(outgoing(Leap{}, N2{}), List<E23>{});
+    EXPECT_EQ(outgoing(Leap{}, N3{}), List<>{});
 }

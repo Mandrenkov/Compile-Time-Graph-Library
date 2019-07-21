@@ -39,6 +39,18 @@ namespace forge {
     using E57 = Edge<N5, N7, 1>;
     using E76 = Edge<N7, N6, 1>;
 
+    using NE11 = Edge<N1, N1, -1>;
+    using NE12 = Edge<N1, N2, -2>;
+    using NE13 = Edge<N1, N3, -3>;
+
+    using NE21 = Edge<N2, N1, -2>;
+    using NE22 = Edge<N2, N2, -3>;
+    using NE23 = Edge<N2, N3, -1>;
+
+    using NE31 = Edge<N3, N1, -3>;
+    using NE32 = Edge<N3, N2, -1>;
+    using NE33 = Edge<N3, N3, -2>;
+
     // Graphs
     // -------------------------------------------------------------------------
     using Empty = Graph<List<>, List<>>;
@@ -61,8 +73,8 @@ namespace forge {
     //  '-----------------^
     using Leap = Graph<List<N1, N2, N3>, List<E12, E23, E13>>;
 
-    // (N1) ----> (N2)
-    //  ^-- (N3) --'
+    // (N1) -----> (N2)
+    //  ^-- (N3) <--'
     using Triangle = Graph<List<N1, N2, N3>, List<E12, E23, E31>>;
 
     // (N1) ------> (N2) --> (N3)
@@ -72,4 +84,19 @@ namespace forge {
     // (N5) ------> (N6)
     //  '--> (N7) ---^
     using Bow = Graph<List<N5, N6, N7>, List<E56, E57, E76>>;
+
+    // Graphs with Negative Cycles
+    // -------------------------------------------------------------------------
+
+    //  v----.
+    // (N1) -'
+    using Alone = Graph<List<N1>, List<NE11>>;
+
+    // (N1) --v
+    //  ^--- (N2)
+    using Debate = Graph<List<N1, N2>, List<NE12, NE21>>;
+
+    // (N1) -----> (N2)
+    //  ^-- (N3) <--'
+    using Spiral = Graph<List<N1, N2, N3>, List<NE12, NE23, NE31>>;
 }

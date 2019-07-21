@@ -4,63 +4,52 @@
 #include "forge.h"
 
 using namespace ctgl;
+using namespace forge;
 
-
-// Convenient Type Aliases
-// -----------------------------------------------------------------------------
-template <typename... Es>
-using NodesType = decltype(path::nodes(Path<Es...>{}));
-
-template <typename T, typename P>
-using DropType = decltype(path::drop(T{}, P{}));
-
-
-// Unit Tests
-// -----------------------------------------------------------------------------
-// Tests for the length() function.
+// Unit tests for the ctgl::path::length() function.
 TEST(PathTest, Length) {
     // Empty
     EXPECT_EQ(path::length(Path<>{}), 0);
 
     // Single
-    EXPECT_EQ(path::length(Path<forge::E11>{}), 1);
-    EXPECT_EQ(path::length(Path<forge::E12>{}), 2);
+    EXPECT_EQ(path::length(Path<E11>{}), 1);
+    EXPECT_EQ(path::length(Path<E12>{}), 2);
 
     // Multiple
-    EXPECT_EQ(path::length(Path<forge::E11, forge::E11>{}), 2);
-    EXPECT_EQ(path::length(Path<forge::E11, forge::E12>{}), 3);
-    EXPECT_EQ(path::length(Path<forge::E12, forge::E11>{}), 3);
-    EXPECT_EQ(path::length(Path<forge::E11, forge::E21, forge::E31, forge::E41>{}), 10);
+    EXPECT_EQ(path::length(Path<E11, E11>{}), 2);
+    EXPECT_EQ(path::length(Path<E11, E12>{}), 3);
+    EXPECT_EQ(path::length(Path<E12, E11>{}), 3);
+    EXPECT_EQ(path::length(Path<E11, E21, E31, E41>{}), 10);
 }
 
-// Tests for the nodes() function.
+// Unit tests for the ctgl::path::nodes() function.
 TEST(PathTest, Nodes) {
     // Empty
-    EXPECT_TRUE((std::is_same<NodesType<>, List<>>::value));
+    EXPECT_EQ(path::nodes(Path<>{}), List<>{});
 
     // Single
-    EXPECT_TRUE((std::is_same<NodesType<forge::E11>, List<forge::N1>>::value));
-    EXPECT_TRUE((std::is_same<NodesType<forge::E11, forge::E11>, List<forge::N1>>::value));
+    EXPECT_EQ(path::nodes(Path<E11>{}), List<N1>{});
+    EXPECT_EQ(path::nodes(Path<E11, E11>{}), List<N1>{});
 
     // Multiple
-    EXPECT_TRUE((std::is_same<NodesType<forge::E12>, List<forge::N1, forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<NodesType<forge::E21>, List<forge::N2, forge::N1>>::value));
-    EXPECT_TRUE((std::is_same<NodesType<forge::E12, forge::E23>, List<forge::N1, forge::N2, forge::N3>>::value));
+    EXPECT_EQ(path::nodes(Path<E12>{}), (List<N1, N2>{}));
+    EXPECT_EQ(path::nodes(Path<E21>{}), (List<N2, N1>{}));
+    EXPECT_EQ(path::nodes(Path<E12, E23>{}), (List<N1, N2, N3>{}));
 }
 
-// Tests for the drop() function.
+// Unit tests for the ctgl::path::drop() function.
 TEST(PathTest, Drop) {
     // Empty
-    EXPECT_TRUE((std::is_same<DropType<forge::N1, Path<>>, Path<>>::value));
+    EXPECT_EQ(path::drop(N1{}, Path<>{}), Path<>{});
 
     // Single
-    EXPECT_TRUE((std::is_same<DropType<forge::N1, Path<forge::E23>>, Path<>>::value));
-    EXPECT_TRUE((std::is_same<DropType<forge::N2, Path<forge::E23>>, Path<forge::E23>>::value));
-    EXPECT_TRUE((std::is_same<DropType<forge::N3, Path<forge::E23>>, Path<>>::value));
+    EXPECT_EQ(path::drop(N1{}, Path<E23>{}), Path<>{});
+    EXPECT_EQ(path::drop(N2{}, Path<E23>{}), Path<E23>{});
+    EXPECT_EQ(path::drop(N3{}, Path<E23>{}), Path<>{});
 
     // Multiple
-    EXPECT_TRUE((std::is_same<DropType<forge::N1, Path<forge::E23, forge::E34>>, Path<>>::value));
-    EXPECT_TRUE((std::is_same<DropType<forge::N2, Path<forge::E12, forge::E23>>, Path<forge::E23>>::value));
-    EXPECT_TRUE((std::is_same<DropType<forge::N3, Path<forge::E34, forge::E41>>, Path<forge::E34, forge::E41>>::value));
-    EXPECT_TRUE((std::is_same<DropType<forge::N4, Path<forge::E34, forge::E41, forge::E23>>, Path<forge::E41, forge::E23>>::value));
+    EXPECT_EQ(path::drop(N1{}, Path<E23, E34>{}), Path<>{});
+    EXPECT_EQ(path::drop(N2{}, Path<E12, E23>{}), Path<E23>{});
+    EXPECT_EQ(path::drop(N3{}, Path<E34, E41>{}), (Path<E34, E41>{}));
+    EXPECT_EQ(path::drop(N4{}, Path<E34, E41, E23>{}), (Path<E41, E23>{}));
 }

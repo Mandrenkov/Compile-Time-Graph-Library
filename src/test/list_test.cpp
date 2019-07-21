@@ -1,66 +1,55 @@
 #include <sstream>
 #include <string>
-#include <type_traits>
 
 #include <gtest/gtest.h>
 
 #include "../h/list.h"
 
-
 using namespace ctgl;
 
-
-// Convenient Type Aliases
-// -----------------------------------------------------------------------------
-template <typename T, typename U>
-using RemoveType = decltype(remove(T{}, U{}));
-
-template <typename T>
-using FrontType = decltype(front(T{}));
-
-template <typename T>
-using UniqueType = decltype(unique(T{}));
-
-
-// Unit Tests
-// -----------------------------------------------------------------------------
-// Tests for the size() function.
+// Unit tests for the ctgl::list::size() function.
 TEST(ListTest, Size) {
-    EXPECT_EQ(size(List<>{}), 0);
-    EXPECT_EQ(size(List<int>{}), 1);
-    EXPECT_EQ(size(List<int, float, double>{}), 3);
-    EXPECT_EQ(size(List<int, int>{}), 2);
+    // Empty
+    EXPECT_EQ(list::size(List<>{}), 0);
+
+    // Not Empty
+    EXPECT_EQ(list::size(List<int>{}), 1);
+    EXPECT_EQ(list::size(List<int, int>{}), 2);
+    EXPECT_EQ(list::size(List<int, float, double>{}), 3);
 }
 
-// Tests for the empty() function.
+// Unit tests for the ctgl::list::empty() function.
 TEST(ListTest, Empty) {
+    // Empty
     EXPECT_TRUE(empty(List<>{}));
+
+    // Not Empty
     EXPECT_FALSE(empty(List<int>{}));
     EXPECT_FALSE(empty(List<int, bool>{}));
 }
 
-// Tests for the remove() function.
+// Unit tests for the ctgl::list::remove() function.
 TEST(ListTest, Remove) {
     // Empty
-    EXPECT_TRUE((std::is_same<RemoveType<int, List<>>, List<>>::value));
+    EXPECT_EQ(remove(int{}, List<>{}), List<>{});
 
     // Single
-    EXPECT_TRUE((std::is_same<RemoveType<int, List<int>>, List<>>::value));
-    EXPECT_TRUE((std::is_same<RemoveType<bool, List<int>>, List<int>>::value));
+    EXPECT_EQ(remove(int{}, List<int>{}), List<>{});
+    EXPECT_EQ(remove(bool{}, List<int>{}), List<int>{});
 
     // Multiple
-    EXPECT_TRUE((std::is_same<RemoveType<int, List<int, int>>, List<>>::value));
-    EXPECT_TRUE((std::is_same<RemoveType<int, List<int, float, int>>, List<float>>::value));
-    EXPECT_TRUE((std::is_same<RemoveType<int, List<float, double>>, List<float, double>>::value));
+    EXPECT_EQ(remove(int{}, List<int, int>{}), List<>{});
+    EXPECT_EQ(remove(int{}, List<int, float, int>{}), List<float>{});
+    EXPECT_EQ(remove(int{}, List<float, double>{}), (List<float, double>{}));
 }
 
-// Tests for the front() function.
+// Unit tests for the ctgl::list::front() function.
 TEST(ListTest, Front) {
-    EXPECT_TRUE((std::is_same<FrontType<List<int>>, int>::value));
-    EXPECT_TRUE((std::is_same<FrontType<List<int, float, double>>, int>::value));
+    EXPECT_EQ(front(List<int>{}), int{});
+    EXPECT_EQ(front(List<int, float, double>{}), int{});
 }
 
-// Tests for the contains() function.
+// Unit tests for the ctgl::list::contains() function.
 TEST(ListTest, Contains) {
     // Empty
     EXPECT_FALSE(contains(int{}, List<>{}));
@@ -74,22 +63,22 @@ TEST(ListTest, Contains) {
     EXPECT_FALSE(contains(bool{}, List<int, float, double>{}));
 }
 
-// Tests for the unique() function.
+// Unit tests for the ctgl::list::unique() function.
 TEST(ListTest, Unique) {
     // Empty
-    EXPECT_TRUE((std::is_same<UniqueType<List<>>, List<>>::value));
+    EXPECT_EQ(unique(List<>{}), List<>{});
 
     // Identity
-    EXPECT_TRUE((std::is_same<UniqueType<List<int>>, List<int>>::value));
-    EXPECT_TRUE((std::is_same<UniqueType<List<int, double>>, List<int, double>>::value));
+    EXPECT_EQ(unique(List<int>{}), List<int>{});
+    EXPECT_EQ(unique(List<int, double>{}), (List<int, double>{}));
 
     // Duplicates
-    EXPECT_TRUE((std::is_same<UniqueType<List<int, int>>, List<int>>::value));
-    EXPECT_TRUE((std::is_same<UniqueType<List<int, bool, int>>, List<bool, int>>::value));
-    EXPECT_TRUE((std::is_same<UniqueType<List<bool, int, bool, int>>, List<bool, int>>::value));
+    EXPECT_EQ(unique(List<int, int>{}), List<int>{});
+    EXPECT_EQ(unique(List<int, bool, int>{}), (List<bool, int>{}));
+    EXPECT_EQ(unique(List<bool, int, bool, int>{}), (List<bool, int>{}));
 }
 
-// Tests for the "==" operator.
+// Unit tests for the ctgl::list::"==" operator.
 TEST(ListTest, Equals) {
     // Empty
     EXPECT_TRUE(List<>{} == List<>{});
@@ -110,23 +99,23 @@ TEST(ListTest, Equals) {
     EXPECT_FALSE((List<int, bool>{}) == (List<bool, int>{}));
 }
 
-// Tests for the "+" operator.
+// Unit tests for the ctgl::list::"+" operator.
 TEST(ListTest, Plus) {
     // Empty
-    EXPECT_TRUE(List<>{} + List<>{} == List<>{});
+    EXPECT_EQ(List<>{} + List<>{}, List<>{});
 
     // Single
-    EXPECT_TRUE(int{} + List<>{} == List<int>{});
-    EXPECT_TRUE(List<>{} + int{} == List<int>{});
+    EXPECT_EQ(int{} + List<>{}, List<int>{});
+    EXPECT_EQ(List<>{} + int{}, List<int>{});
 
     // Multiple
-    EXPECT_TRUE((int{} + List<int>{} == List<int, int>{}));
-    EXPECT_TRUE((int{} + List<bool>{} == List<int, bool>{}));
-    EXPECT_TRUE((List<int>{} + bool{} == List<int, bool>{}));
-    EXPECT_TRUE((List<int>{} + List<bool>{} == List<int, bool>{}));
+    EXPECT_EQ(int{} + List<int>{}, (List<int, int>{}));
+    EXPECT_EQ(int{} + List<bool>{}, (List<int, bool>{}));
+    EXPECT_EQ(List<int>{} + bool{}, (List<int, bool>{}));
+    EXPECT_EQ(List<int>{} + List<bool>{}, (List<int, bool>{}));
 }
 
-// Tests for the "<<" operator.
+// Unit tests for the ctgl::list::"<<" operator.
 TEST(ListTest, OutputStream) {
     {   // Empty
         std::ostringstream stream;

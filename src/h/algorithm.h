@@ -51,7 +51,7 @@ namespace ctgl {
             }
 
             // Compute the shortest path that follows the current Edge.
-            constexpr auto next = graph::outgoing(G{}, typename E::Head{});
+            constexpr auto next = graph::getOutgoingEdges(G{}, typename E::Head{});
             constexpr auto take = findShortestPath(G{}, typename E::Head{}, T{}, next, List<Ps..., E>{});
 
             // The shortest path is selected based on the following tabular expresssion:
@@ -90,7 +90,7 @@ namespace ctgl {
             if constexpr (!feasible) {
                 return path::DNE;
             } else {
-                constexpr auto next = graph::outgoing(G{}, S{});
+                constexpr auto next = graph::getOutgoingEdges(G{}, S{});
                 return findShortestPath(G{}, S{}, T{}, next, List<>{});
             }
         }

@@ -8,78 +8,78 @@
 using namespace ctgl;
 using namespace forge;
 
-// Unit tests for the ctgl::graph::adjacent() function.
-TEST(GraphTest, Adjacent) {
+// Unit tests for the ctgl::graph::getAdjacentNodes() function.
+TEST(GraphTest, GetAdjacentNodes) {
     // Empty
-    EXPECT_EQ(adjacent(Empty{}, N1{}), List<>{});
+    EXPECT_EQ(getAdjacentNodes(Empty{}, N1{}), List<>{});
 
     // Island
-    EXPECT_EQ(adjacent(Island{}, N1{}), List<>{});
-    EXPECT_EQ(adjacent(Island{}, N2{}), List<>{});
+    EXPECT_EQ(getAdjacentNodes(Island{}, N1{}), List<>{});
+    EXPECT_EQ(getAdjacentNodes(Island{}, N2{}), List<>{});
 
     // Loopback
-    EXPECT_EQ(adjacent(Loopback{}, N1{}), List<N1>{});
+    EXPECT_EQ(getAdjacentNodes(Loopback{}, N1{}), List<N1>{});
 
     // Arrow
-    EXPECT_EQ(adjacent(Arrow{}, N1{}), List<N2>{});
-    EXPECT_EQ(adjacent(Arrow{}, N2{}), List<>{});
+    EXPECT_EQ(getAdjacentNodes(Arrow{}, N1{}), List<N2>{});
+    EXPECT_EQ(getAdjacentNodes(Arrow{}, N2{}), List<>{});
 
     // Bridge
-    EXPECT_EQ(adjacent(Bridge{}, N1{}), List<N2>{});
-    EXPECT_EQ(adjacent(Bridge{}, N2{}), List<N1>{});
+    EXPECT_EQ(getAdjacentNodes(Bridge{}, N1{}), List<N2>{});
+    EXPECT_EQ(getAdjacentNodes(Bridge{}, N2{}), List<N1>{});
 
     // Leap
-    EXPECT_EQ(adjacent(Leap{}, N1{}), (List<N2, N3>{}));
-    EXPECT_EQ(adjacent(Leap{}, N2{}), List<N3>{});
-    EXPECT_EQ(adjacent(Leap{}, N3{}), List<>{});
+    EXPECT_EQ(getAdjacentNodes(Leap{}, N1{}), (List<N2, N3>{}));
+    EXPECT_EQ(getAdjacentNodes(Leap{}, N2{}), List<N3>{});
+    EXPECT_EQ(getAdjacentNodes(Leap{}, N3{}), List<>{});
 }
 
-// Unit tests for the ctgl::graph::connected() function.
-TEST(GraphTest, Connected) {
+// Unit tests for the ctgl::graph::getConnectedNodes() function.
+TEST(GraphTest, GetConnectedNodes) {
     // Empty
-    EXPECT_EQ(connected(Empty{}, N1{}), List<>{});
+    EXPECT_EQ(getConnectedNodes(Empty{}, N1{}), List<>{});
 
     // Island
-    EXPECT_EQ(connected(Island{}, N1{}), List<N1>{});
-    EXPECT_EQ(connected(Island{}, N2{}), List<>{});
+    EXPECT_EQ(getConnectedNodes(Island{}, N1{}), List<N1>{});
+    EXPECT_EQ(getConnectedNodes(Island{}, N2{}), List<>{});
 
     // Loopback
-    EXPECT_EQ(connected(Loopback{}, N1{}), List<N1>{});
+    EXPECT_EQ(getConnectedNodes(Loopback{}, N1{}), List<N1>{});
 
     // Pan
-    EXPECT_EQ(connected(Pan{}, N1{}), (List<N4, N3, N2, N1>{}));
-    EXPECT_EQ(connected(Pan{}, N2{}), (List<N3, N2>{}));
-    EXPECT_EQ(connected(Pan{}, N3{}), List<N3>{});
-    EXPECT_EQ(connected(Pan{}, N4{}), (List<N3, N2, N4>{}));
+    EXPECT_EQ(getConnectedNodes(Pan{}, N1{}), (List<N4, N3, N2, N1>{}));
+    EXPECT_EQ(getConnectedNodes(Pan{}, N2{}), (List<N3, N2>{}));
+    EXPECT_EQ(getConnectedNodes(Pan{}, N3{}), List<N3>{});
+    EXPECT_EQ(getConnectedNodes(Pan{}, N4{}), (List<N3, N2, N4>{}));
 
     // Triangle
-    EXPECT_EQ(connected(Triangle{}, N1{}), (List<N3, N2, N1>{}));
-    EXPECT_EQ(connected(Triangle{}, N2{}), (List<N1, N3, N2>{}));
-    EXPECT_EQ(connected(Triangle{}, N3{}), (List<N2, N1, N3>{}));
+    EXPECT_EQ(getConnectedNodes(Triangle{}, N1{}), (List<N3, N2, N1>{}));
+    EXPECT_EQ(getConnectedNodes(Triangle{}, N2{}), (List<N1, N3, N2>{}));
+    EXPECT_EQ(getConnectedNodes(Triangle{}, N3{}), (List<N2, N1, N3>{}));
 }
 
-// Unit tests for the ctgl::graph::outgoing() function.
-TEST(GraphTest, Outgoing) {
+// Unit tests for the ctgl::graph::getOutgoingEdges() function.
+TEST(GraphTest, GetOutgoingEdges) {
     // Empty
-    EXPECT_EQ(outgoing(Empty{}, N1{}), List<>{});
+    EXPECT_EQ(getOutgoingEdges(Empty{}, N1{}), List<>{});
 
     // Island
-    EXPECT_EQ(outgoing(Empty{}, N1{}), List<>{});
-    EXPECT_EQ(outgoing(Empty{}, N2{}), List<>{});
+    EXPECT_EQ(getOutgoingEdges(Empty{}, N1{}), List<>{});
+    EXPECT_EQ(getOutgoingEdges(Empty{}, N2{}), List<>{});
 
     // Loopback
-    EXPECT_EQ(outgoing(Loopback{}, N1{}), List<E11>{});
+    EXPECT_EQ(getOutgoingEdges(Loopback{}, N1{}), List<E11>{});
 
     // Arrow
-    EXPECT_EQ(outgoing(Arrow{}, N1{}), List<E12>{});
-    EXPECT_EQ(outgoing(Arrow{}, N2{}), List<>{});
+    EXPECT_EQ(getOutgoingEdges(Arrow{}, N1{}), List<E12>{});
+    EXPECT_EQ(getOutgoingEdges(Arrow{}, N2{}), List<>{});
 
     // Bridge
-    EXPECT_EQ(outgoing(Bridge{}, N1{}), List<E12>{});
-    EXPECT_EQ(outgoing(Bridge{}, N2{}), List<E21>{});
+    EXPECT_EQ(getOutgoingEdges(Bridge{}, N1{}), List<E12>{});
+    EXPECT_EQ(getOutgoingEdges(Bridge{}, N2{}), List<E21>{});
 
     // Leap
-    EXPECT_EQ(outgoing(Leap{}, N1{}), (List<E12, E13>{}));
-    EXPECT_EQ(outgoing(Leap{}, N2{}), List<E23>{});
-    EXPECT_EQ(outgoing(Leap{}, N3{}), List<>{});
+    EXPECT_EQ(getOutgoingEdges(Leap{}, N1{}), (List<E12, E13>{}));
+    EXPECT_EQ(getOutgoingEdges(Leap{}, N2{}), List<E23>{});
+    EXPECT_EQ(getOutgoingEdges(Leap{}, N3{}), List<>{});
 }

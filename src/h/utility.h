@@ -2,14 +2,14 @@
 
 #include <limits>
 
-// CTGL Constants
+// Constants
 // -----------------------------------------------------------------------------
 namespace ctgl {
     // INF represents an invalid distance (e.g., the distance between two disconnected nodes).
     constexpr int INF = std::numeric_limits<int>::max();
 }
 
-// CTGL Global Types
+// Types
 // -----------------------------------------------------------------------------
 namespace ctgl {
     namespace util {

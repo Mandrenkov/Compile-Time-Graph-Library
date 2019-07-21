@@ -62,20 +62,20 @@ TEST(AlgorithmTest, FindDistance) {
 // Unit tests for the ctgl::algorithm::findShortestPath() function.
 TEST(AlgorithmTest, FindShortestPath) {
     // Empty
-    EXPECT_EQ(algorithm::findShortestPath(Empty{}, N1{}, N1{}), DNE);
-    EXPECT_EQ(algorithm::findShortestPath(Empty{}, N1{}, N2{}), DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Empty{}, N1{}, N1{}), path::DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Empty{}, N1{}, N2{}), path::DNE);
 
     // Island
     EXPECT_EQ(algorithm::findShortestPath(Island{}, N1{}, N1{}), Path<>{});
-    EXPECT_EQ(algorithm::findShortestPath(Island{}, N1{}, N2{}), DNE);
-    EXPECT_EQ(algorithm::findShortestPath(Island{}, N2{}, N1{}), DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Island{}, N1{}, N2{}), path::DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Island{}, N2{}, N1{}), path::DNE);
 
     // Loopback
     EXPECT_EQ(algorithm::findShortestPath(Loopback{}, N1{}, N1{}), Path<>{});
 
     // Arrow
     EXPECT_EQ(algorithm::findShortestPath(Arrow{}, N1{}, N2{}), Path<E12>{});
-    EXPECT_EQ(algorithm::findShortestPath(Arrow{}, N2{}, N1{}), DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Arrow{}, N2{}, N1{}), path::DNE);
 
     // Bridge
     EXPECT_EQ(algorithm::findShortestPath(Bridge{}, N1{}, N2{}), Path<E12>{});
@@ -87,17 +87,17 @@ TEST(AlgorithmTest, FindShortestPath) {
     EXPECT_EQ(algorithm::findShortestPath(Pan{}, N1{}, N3{}), (Path<E12, E23>{}));
     EXPECT_EQ(algorithm::findShortestPath(Pan{}, N1{}, N4{}), Path<E14>{});
 
-    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N2{}, N1{}), DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N2{}, N1{}), path::DNE);
     EXPECT_EQ(algorithm::findShortestPath(Pan{}, N2{}, N2{}), Path<>{});
     EXPECT_EQ(algorithm::findShortestPath(Pan{}, N2{}, N3{}), Path<E23>{});
-    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N2{}, N4{}), DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N2{}, N4{}), path::DNE);
 
-    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N3{}, N1{}), DNE);
-    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N3{}, N2{}), DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N3{}, N1{}), path::DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N3{}, N2{}), path::DNE);
     EXPECT_EQ(algorithm::findShortestPath(Pan{}, N3{}, N3{}), Path<>{});
-    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N3{}, N4{}), DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N3{}, N4{}), path::DNE);
 
-    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N4{}, N1{}), DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Pan{}, N4{}, N1{}), path::DNE);
     EXPECT_EQ(algorithm::findShortestPath(Pan{}, N4{}, N2{}), Path<E42>{});
     EXPECT_EQ(algorithm::findShortestPath(Pan{}, N4{}, N3{}), (Path<E42, E23>{}));
     EXPECT_EQ(algorithm::findShortestPath(Pan{}, N4{}, N4{}), Path<>{});
@@ -105,8 +105,8 @@ TEST(AlgorithmTest, FindShortestPath) {
     // Bow
     EXPECT_EQ(algorithm::findShortestPath(Bow{}, N5{}, N6{}), (Path<E57, E76>{}));
     EXPECT_EQ(algorithm::findShortestPath(Bow{}, N5{}, N7{}), Path<E57>{});
-    EXPECT_EQ(algorithm::findShortestPath(Bow{}, N6{}, N5{}), DNE);
-    EXPECT_EQ(algorithm::findShortestPath(Bow{}, N6{}, N7{}), DNE);
-    EXPECT_EQ(algorithm::findShortestPath(Bow{}, N7{}, N5{}), DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Bow{}, N6{}, N5{}), path::DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Bow{}, N6{}, N7{}), path::DNE);
+    EXPECT_EQ(algorithm::findShortestPath(Bow{}, N7{}, N5{}), path::DNE);
     EXPECT_EQ(algorithm::findShortestPath(Bow{}, N7{}, N6{}), Path<E76>{});
 }

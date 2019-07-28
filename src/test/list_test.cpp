@@ -129,7 +129,7 @@ TEST(ListTest, Distribute) {
     EXPECT_EQ(int{} * (List<List<bool>, List<void>>{}), (List<List<int, bool>, List<int, void>>{}));
 }
 
-// Unit tests for the ctgl::list::"<<" operator.
+// Unit tests for the ctgl::list::<< operator.
 TEST(ListTest, OutputStream) {
     {   // Empty
         std::ostringstream stream;

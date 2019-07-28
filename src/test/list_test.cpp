@@ -99,7 +99,7 @@ TEST(ListTest, Equals) {
     EXPECT_FALSE((List<int, bool>{}) == (List<bool, int>{}));
 }
 
-// Unit tests for the ctgl::list::"+" operator.
+// Unit tests for the ctgl::list::+ operator.
 TEST(ListTest, Plus) {
     // Empty
     EXPECT_EQ(List<>{} + List<>{}, List<>{});
@@ -113,6 +113,20 @@ TEST(ListTest, Plus) {
     EXPECT_EQ(int{} + List<bool>{}, (List<int, bool>{}));
     EXPECT_EQ(List<int>{} + bool{}, (List<int, bool>{}));
     EXPECT_EQ(List<int>{} + List<bool>{}, (List<int, bool>{}));
+}
+
+// Unit tests for the ctgl::list::* operator.
+TEST(ListTest, Distribute) {
+    // Empty
+    EXPECT_EQ(int{} * List<>{}, List<>{});
+
+    // Single
+    EXPECT_EQ(int{} * List<List<int>>{}, (List<List<int, int>>{}));
+    EXPECT_EQ(int{} * List<List<bool>>{}, (List<List<int, bool>>{}));
+
+    // Multiple
+    EXPECT_EQ(int{} * (List<List<float, double>>{}), (List<List<int, float, double>>{}));
+    EXPECT_EQ(int{} * (List<List<bool>, List<void>>{}), (List<List<int, bool>, List<int, void>>{}));
 }
 
 // Unit tests for the ctgl::list::"<<" operator.

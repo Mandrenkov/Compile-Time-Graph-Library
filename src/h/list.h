@@ -54,6 +54,10 @@ namespace ctgl {
         // Concatenates two Lists together.
         template <typename... Ts, typename... Us>
         constexpr auto operator+(List<Ts...>, List<Us...>) noexcept;
+
+        // Adds the given element to each List in the provided List of Lists.
+        template <typename T, typename... Ts>
+        constexpr auto operator*(T, List<Ts...>) noexcept;
     }
 
     // -------------------------------------------------------------------------
@@ -141,6 +145,18 @@ namespace ctgl {
         template <typename... Ts, typename... Us>
         constexpr auto operator+(List<Ts...>, List<Us...>) noexcept {
             return List<Ts..., Us...>{};
+        }
+
+        template <typename T>
+        constexpr auto operator*(T, List<>) noexcept {
+            return List<>{};
+        }
+
+        template <typename T, typename... Us, typename... Ts>
+        constexpr auto operator*(T, List<List<Us...>, Ts...>) noexcept {
+            constexpr auto head = List<List<T, Us...>>{};
+            constexpr auto tail = T{} * List<Ts...>{};
+            return head + tail;
         }
 
         // Streams the names of the types that compose the given List to the provided output stream.

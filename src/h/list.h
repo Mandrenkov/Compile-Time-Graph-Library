@@ -39,6 +39,10 @@ namespace ctgl {
         template <typename T, typename... Ts>
         constexpr auto unique(List<T, Ts...>) noexcept;
 
+        // Generates a List of all the permutations of the given List.
+        template <typename... Ts>
+        constexpr auto permutations(List<Ts...>) noexcept;
+
         // Reports whether the given Lists are the same.
         template <typename... Ts>
         constexpr bool operator==(List<Ts...>, List<Ts...>) noexcept;
@@ -119,6 +123,28 @@ namespace ctgl {
         }
 
         constexpr auto unique(List<>) noexcept {
+            return List<>{};
+        }
+
+        template<typename... Ts>
+        constexpr auto permutations(List<Ts...>) noexcept {
+            return permutations(List<>{}, List<Ts...>{});
+        }
+
+        template<typename T>
+        constexpr auto permutations(List<T>) noexcept {
+            return List<List<T>>{};
+        }
+        
+        template<typename... Ls, typename R, typename... Rs>
+        constexpr auto permutations(List<Ls...>, List<R, Rs...>) noexcept {
+            constexpr auto center = R{} * permutations(List<Ls..., Rs...>{});
+            constexpr auto suffix = permutations(List<Ls..., R>{}, List<Rs...>{});
+            return center + suffix;
+        }
+
+        template<typename... Ls>
+        constexpr auto permutations(List<Ls...>, List<>) noexcept {
             return List<>{};
         }
 

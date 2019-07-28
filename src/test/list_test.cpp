@@ -78,7 +78,23 @@ TEST(ListTest, Unique) {
     EXPECT_EQ(unique(List<bool, int, bool, int>{}), (List<bool, int>{}));
 }
 
-// Unit tests for the ctgl::list::"==" operator.
+// Unit tests for the ctgl::list::permutations() function.
+TEST(ListTest, Permutations) {
+    // Empty
+    EXPECT_EQ(permutations(List<>{}), List<>{});
+
+    // Not Empty
+    EXPECT_EQ(permutations(List<int>{}), List<List<int>>{});
+    EXPECT_EQ(permutations(List<int, bool>{}), (List<List<int, bool>, List<bool, int>>{}));
+    EXPECT_EQ(permutations(List<int, bool, long>{}), (List<List<int, bool, long>,
+                                                           List<int, long, bool>,
+                                                           List<bool, int, long>,
+                                                           List<bool, long, int>,
+                                                           List<long, int, bool>,
+                                                           List<long, bool, int>>{}));
+}
+
+// Unit tests for the ctgl::list::== operator.
 TEST(ListTest, Equals) {
     // Empty
     EXPECT_TRUE(List<>{} == List<>{});
@@ -116,7 +132,7 @@ TEST(ListTest, Plus) {
 }
 
 // Unit tests for the ctgl::list::* operator.
-TEST(ListTest, Distribute) {
+TEST(ListTest, Star) {
     // Empty
     EXPECT_EQ(int{} * List<>{}, List<>{});
 
@@ -126,7 +142,7 @@ TEST(ListTest, Distribute) {
 
     // Multiple
     EXPECT_EQ(int{} * (List<List<float, double>>{}), (List<List<int, float, double>>{}));
-    EXPECT_EQ(int{} * (List<List<bool>, List<void>>{}), (List<List<int, bool>, List<int, void>>{}));
+    EXPECT_EQ(int{} * (List<List<bool>, List<long>>{}), (List<List<int, bool>, List<int, long>>{}));
 }
 
 // Unit tests for the ctgl::list::<< operator.

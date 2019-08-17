@@ -12,8 +12,14 @@ namespace ctgl {
         // Finds the shortest path (without negative cycles) between Node |S| and
         // Node |T| in the Graph |G|.  If there is no path from |S| to |T|, DNE
         // is returned.
-        template <typename G, typename S, typename T, typename... Ns>
-        constexpr auto findShortestPath(G, S, T, List<Ns...>) noexcept;
+        template <typename G, typename S, typename T>
+        constexpr auto findShortestPath(G, S, T) noexcept;
+
+        // Finds the shortest route (without negative cycles) in the Graph |G|
+        // that starts at Node |S|, visits each Node in |Ns|, and then returns
+        // back to Node |S|.  If such a route does not exist, DNE is returned.
+        template <typename G, typename S, typename... Ns>
+        constexpr auto findShortestRoute(G, S, List<Ns...>) noexcept;
 
         // Finds the distance (ignoring negative cycles) between Node |S| and
         // Node |T| in the Graph |G|.  If there is no path from |S| to |T|, INF
@@ -54,32 +60,7 @@ namespace ctgl {
                 // Compute the shortest path that follows the current Edge.
                 constexpr auto next = graph::getOutgoingEdges(G{}, typename E::Head{});
                 constexpr auto take = findShortestPath(G{}, typename E::Head{}, T{}, next, List<Ps..., E>{});
-
-                // The shortest path is selected based on the following tabular expresssion:
-                // +-------------+-------------+     +------+
-                // | skip == DNE | take == DNE | --> | DNE  |
-                // |             |-------------+     +------+
-                // |             | take != DNE | --> | take |
-                // +-------------+-------------+     +------+
-                // | skip <= x   | take == DNE | --> | skip |
-                // |             |-------------+     +------+
-                // |             | take > x    | --> | skip |
-                // +-------------+-------------+     +------+
-                // | skip > x    | take == DNE | --> | skip |
-                // |             |-------------+     +------+
-                // |             | take <= x   | --> | take |
-                // +-------------+-------------+     +------+
-                if constexpr (skip == path::DNE && take == path::DNE) {
-                    return path::DNE;
-                } else if constexpr (skip == path::DNE) {
-                    return take;
-                } else if constexpr (take == path::DNE) {
-                    return skip;
-                } else if constexpr (path::length(skip) <= path::length(take)) {
-                    return skip;
-                } else {
-                    return take;
-                }
+                return path::shortest(skip, take);
             }
         }
 
@@ -96,6 +77,47 @@ namespace ctgl {
                 return findShortestPath(G{}, S{}, T{}, next, List<>{});
             }
         }
+
+        template <typename G, typename N1, typename N2>
+        constexpr auto findShortestPaths(G, List<N1, N2>) noexcept {
+            return findShortestPath(G{}, N1{}, N2{});
+        }
+
+        template <typename G, typename N1, typename N2, typename N3, typename... Ns>
+        constexpr auto findShortestPaths(G, List<N1, N2, N3, Ns...>) noexcept {
+            constexpr auto head = findShortestPath(G{}, N1{}, N2{});
+            if constexpr (head == path::DNE) {
+                return path::DNE;
+            } else {
+                constexpr auto tail = findShortestPaths(G{}, List<N2, N3, Ns...>{});
+                return path::join(head, tail);
+            }
+        }
+
+        template <typename G>
+        constexpr auto findShortestRoutes(G, List<>) noexcept {
+            return path::DNE;
+        }
+
+        template <typename G, typename... O, typename... Os>
+        constexpr auto findShortestRoutes(G, List<List<O...>, Os...>) noexcept {
+            constexpr auto take = findShortestPaths(G{}, List<O...>{});
+            constexpr auto skip = findShortestRoutes(G{}, List<Os...>{});
+            return path::shortest(take, skip);
+        }
+
+        template <typename G, typename S, typename... Ns>
+        constexpr auto findShortestRoute(G, S, List<Ns...>) noexcept {
+            constexpr auto unique = list::remove(S{}, list::unique(List<Ns...>{}));
+            constexpr auto middle = list::permutations(unique);
+            constexpr auto orders = S{} * middle * S{};
+            if constexpr (list::empty(orders)) {
+                return findShortestRoutes(G{}, List<List<S, S>>{});
+            } else {
+                return findShortestRoutes(G{}, orders);
+            }
+        }
+
 
         template <typename G, typename S, typename T>
         constexpr int findDistance(G, S, T) noexcept {

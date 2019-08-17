@@ -154,3 +154,46 @@ TEST(AlgorithmTest, FindShortestPath) {
     EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N3{}, N2{}), (Path<NE31, NE12>{}));
     EXPECT_EQ(algorithm::findShortestPath(Spiral{}, N3{}, N3{}), Path<>{});
 }
+
+// Unit tests for the ctgl::algorithm::findShortestRoute() function.
+TEST(AlgorithmTest, FindShortestRoute) {
+    // Empty
+    EXPECT_EQ(algorithm::findShortestRoute(Empty{}, N1{}, List<>{}), path::DNE);
+    EXPECT_EQ(algorithm::findShortestRoute(Empty{}, N1{}, List<N1>{}), path::DNE);
+    EXPECT_EQ(algorithm::findShortestRoute(Empty{}, N1{}, List<N1, N2>{}), path::DNE);
+
+    // Island
+    EXPECT_EQ(algorithm::findShortestRoute(Island{}, N1{}, List<>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Island{}, N1{}, List<N1>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Island{}, N1{}, List<N2>{}), path::DNE);
+    EXPECT_EQ(algorithm::findShortestRoute(Island{}, N2{}, List<N1>{}), path::DNE);
+
+    // Loopback
+    EXPECT_EQ(algorithm::findShortestRoute(Loopback{}, N1{}, List<>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Loopback{}, N1{}, List<N1>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Loopback{}, N1{}, List<N1, N1>{}), Path<>{});
+
+    // Arrow
+    EXPECT_EQ(algorithm::findShortestRoute(Arrow{}, N1{}, List<N1>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Arrow{}, N1{}, List<N2>{}), path::DNE);
+    EXPECT_EQ(algorithm::findShortestRoute(Arrow{}, N2{}, List<N2>{}), Path<>{});
+
+    // Bridge
+    EXPECT_EQ(algorithm::findShortestRoute(Bridge{}, N1{}, List<>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Bridge{}, N2{}, List<>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Bridge{}, N1{}, List<N2>{}), (Path<E12, E21>{}));
+    EXPECT_EQ(algorithm::findShortestRoute(Bridge{}, N2{}, List<N1>{}), (Path<E21, E12>{}));
+
+    // Triangle
+    EXPECT_EQ(algorithm::findShortestRoute(Triangle{}, N1{}, List<N1>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Triangle{}, N1{}, List<N2>{}), (Path<E12, E23, E31>{}));
+    EXPECT_EQ(algorithm::findShortestRoute(Triangle{}, N1{}, List<N3>{}), (Path<E12, E23, E31>{}));
+    EXPECT_EQ(algorithm::findShortestRoute(Triangle{}, N1{}, List<N2, N3>{}), (Path<E12, E23, E31>{}));
+    EXPECT_EQ(algorithm::findShortestRoute(Triangle{}, N1{}, List<N3, N2>{}), (Path<E12, E23, E31>{}));
+   
+    // Debate
+    EXPECT_EQ(algorithm::findShortestRoute(Debate{}, N1{}, List<>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Debate{}, N2{}, List<>{}), Path<>{});
+    EXPECT_EQ(algorithm::findShortestRoute(Debate{}, N1{}, List<N2>{}), (Path<NE12, NE21>{}));
+    EXPECT_EQ(algorithm::findShortestRoute(Debate{}, N2{}, List<N1>{}), (Path<NE21, NE12>{}));
+}

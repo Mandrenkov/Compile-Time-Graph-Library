@@ -55,6 +55,19 @@ TEST(PathTest, DropPrefix) {
     EXPECT_EQ(path::dropPrefix(N4{}, Path<E34, E41, E23>{}), (Path<E41, E23>{}));
 }
 
+// Unit tests for the ctgl::path::join() function.
+TEST(PathTest, Join) {
+    // DNE
+    EXPECT_EQ(path::join(path::DNE, path::DNE), path::DNE);
+    EXPECT_EQ(path::join(Path<E11>{}, path::DNE), path::DNE);
+    EXPECT_EQ(path::join(path::DNE, Path<E11>{}), path::DNE);
+
+    // Exists
+    EXPECT_EQ(path::join(Path<E12>{}, Path<E23>{}), (Path<E12, E23>{}));
+    EXPECT_EQ(path::join(Path<E12>{}, Path<E12>{}), (Path<E12, E12>{}));
+    EXPECT_EQ(path::join(Path<E12, E23>{}, Path<E32, E21>{}), (Path<E12, E23, E32, E21>{}));
+}
+
 // Unit tests for the ctgl::path::shortest() function.
 TEST(PathTest, Shortest) {
     // DNE

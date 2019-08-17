@@ -31,6 +31,17 @@ namespace ctgl {
         template <typename T>
         constexpr auto dropPrefix(T, Path<>) noexcept;
 
+        // Concatenates the given Paths using the following tabular expression:
+        // +-----------------------+     +---------+
+        // | p1 == DNE             | --> | DNE     |
+        // +-----------+-----------+     +---------+
+        // | p1 != DNE | p2 == DNE | --> | DNE     |
+        // |           +-----------+     +---------+
+        // |           | p2 != DNE | --> | p1 + p2 |
+        // +-----------+-----------+     +---------+
+        template <typename... Ts, typename... Us>
+        constexpr auto join(Path<Ts...> p1, Path<Us...> p2) noexcept;
+
         // Chooses the "shorter" of the given Paths using the following tabular expression:
         // +--------------------------------------------------+     +----+
         // | p1 == DNE                                        | --> | p2 |
@@ -82,6 +93,15 @@ namespace ctgl {
         template <typename T>
         constexpr auto dropPrefix(T, Path<>) noexcept {
             return Path<>{};
+        }
+
+        template <typename... Ts, typename... Us>
+        constexpr auto join(Path<Ts...> p1, Path<Us...> p2) noexcept {
+            if constexpr (p1 == DNE || p2 == DNE) {
+                return DNE;
+            } else {
+                return p1 + p2;
+            }
         }
 
         template <typename... Ts, typename... Us>

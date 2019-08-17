@@ -47,11 +47,11 @@ namespace ctgl {
         template <typename... Ts>
         constexpr bool operator==(List<Ts...>, List<Ts...>) noexcept;
 
-        // Adds an element to the front of a List.
+        // Prepends the given element to the provided List.
         template <typename T, typename... Ts>
         constexpr auto operator+(T, List<Ts...>) noexcept;
 
-        // Adds an element to the back of a List.
+        // Appends the given element to the provided List.
         template <typename... Ts, typename T>
         constexpr auto operator+(List<Ts...>, T) noexcept;
 
@@ -59,9 +59,17 @@ namespace ctgl {
         template <typename... Ts, typename... Us>
         constexpr auto operator+(List<Ts...>, List<Us...>) noexcept;
 
-        // Adds the given element to each List in the provided List of Lists.
+        // Prepends the given element to each List in the provided List of Lists.
         template <typename T, typename... Ts>
         constexpr auto operator*(T, List<Ts...>) noexcept;
+
+        // Appends the given element to each List in the provided List of Lists.
+        template <typename... Ts, typename T>
+        constexpr auto operator*(List<Ts...>, T) noexcept;
+
+        // Takes the Cartesian product of the given Lists of Lists.
+        template <typename... Ts, typename... Us>
+        constexpr auto operator*(List<Ts...>, List<Us...>) noexcept;
     }
 
     // -------------------------------------------------------------------------
@@ -173,15 +181,37 @@ namespace ctgl {
             return List<Ts..., Us...>{};
         }
 
-        template <typename T>
-        constexpr auto operator*(T, List<>) noexcept {
+        template <typename T, typename... Ts>
+        constexpr auto operator*(T, List<Ts...>) noexcept {
+            return List<List<T>>{} * List<Ts...>{};
+        }
+
+        template <typename... Ts, typename T>
+        constexpr auto operator*(List<Ts...>, T) noexcept {
+            return List<Ts...>{} * List<List<T>>{};
+        }
+
+        template <typename... T>
+        constexpr auto distribute(List<T...>, List<>) noexcept {
             return List<>{};
         }
 
-        template <typename T, typename... Us, typename... Ts>
-        constexpr auto operator*(T, List<List<Us...>, Ts...>) noexcept {
-            constexpr auto head = List<List<T, Us...>>{};
-            constexpr auto tail = T{} * List<Ts...>{};
+        template <typename... T, typename... U, typename... Us>
+        constexpr auto distribute(List<T...>, List<List<U...>, Us...>) noexcept {
+            constexpr auto head = List<List<T..., U...>>{};
+            constexpr auto tail = distribute(List<T...>{}, List<Us...>{});
+            return head + tail;
+        }
+
+        template <typename... Us>
+        constexpr auto operator*(List<>, List<Us...>) noexcept {
+            return List<>{};
+        }
+        
+        template <typename... T, typename... Ts, typename... Us>
+        constexpr auto operator*(List<List<T...>, Ts...>, List<Us...>) noexcept {
+            constexpr auto head = distribute(List<T...>{}, List<Us...>{});
+            constexpr auto tail = List<Ts...>{} * List<Us...>{};
             return head + tail;
         }
 

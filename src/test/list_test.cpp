@@ -135,14 +135,23 @@ TEST(ListTest, Plus) {
 TEST(ListTest, Star) {
     // Empty
     EXPECT_EQ(int{} * List<>{}, List<>{});
+    EXPECT_EQ(List<>{} * int{}, List<>{});
+    EXPECT_EQ(List<>{} * List<>{}, List<>{});
 
     // Single
-    EXPECT_EQ(int{} * List<List<int>>{}, (List<List<int, int>>{}));
     EXPECT_EQ(int{} * List<List<bool>>{}, (List<List<int, bool>>{}));
+    EXPECT_EQ(List<List<bool>>{} * int{}, (List<List<bool, int>>{}));
+    EXPECT_EQ(List<List<int>>{} * List<List<bool>>{}, (List<List<int, bool>>{}));
 
     // Multiple
     EXPECT_EQ(int{} * (List<List<float, double>>{}), (List<List<int, float, double>>{}));
     EXPECT_EQ(int{} * (List<List<bool>, List<long>>{}), (List<List<int, bool>, List<int, long>>{}));
+    EXPECT_EQ((List<List<float, double>>{}) * int{}, (List<List<float, double, int>>{}));
+    EXPECT_EQ((List<List<bool>, List<long>>{}) * int{}, (List<List<bool, int>, List<long, int>>{}));
+    EXPECT_EQ((List<List<bool>, List<long>>{}) * (List<List<int>, List<char>>{}), (List<List<bool, int>,
+                                                                                        List<bool, char>,
+                                                                                        List<long, int>,
+                                                                                        List<long, char>>{}));
 }
 
 // Unit tests for the ctgl::list::<< operator.

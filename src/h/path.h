@@ -30,6 +30,19 @@ namespace ctgl {
 
         template <typename T>
         constexpr auto dropPrefix(T, Path<>) noexcept;
+
+        // Chooses the "shorter" of the given Paths using the following tabular expression:
+        // +--------------------------------------------------+     +----+
+        // | p1 == DNE                                        | --> | p2 |
+        // +-----------+--------------------------------------+     +----+
+        // | p1 != DNE | p2 == DNE                            | --> | p1 |
+        // |           +-----------+--------------------------+     +----+
+        // |           | p2 != DNE | length(p1) <  length(p2) | --> | p1 |
+        // |           |           +--------------------------+     +----+
+        // |           |           | length(p1) >= length(p2) | --> | p2 |
+        // +-----------------------+--------------------------+     +----+
+        template <typename... Ts, typename... Us>
+        constexpr auto shortest(Path<Ts...> p1, Path<Us...> p2) noexcept;
     }
 
     // Definitions
@@ -69,6 +82,19 @@ namespace ctgl {
         template <typename T>
         constexpr auto dropPrefix(T, Path<>) noexcept {
             return Path<>{};
+        }
+
+        template <typename... Ts, typename... Us>
+        constexpr auto shortest(Path<Ts...> p1, Path<Us...> p2) noexcept {
+            if constexpr (p1 == DNE) {
+                return p2;
+            } else if constexpr (p2 == DNE) {
+                return p1;
+            } else if constexpr (length(p1) < length(p2)) {
+                return p1;
+            } else {
+                return p2;
+            }
         }
     }
 

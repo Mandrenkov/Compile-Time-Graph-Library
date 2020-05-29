@@ -9,5 +9,5 @@ namespace ctgl {
     // Returns the shortest path between Node |S| and Node |T| in the |G| Graph.
     // If there is no path from |S| to |T|, an empty List is returned.
     template <typename G, typename S, typename T>
-    constexpr auto path(G, S, T) noexcept;
+    constexpr auto shortest(G, S, T) noexcept;
 }

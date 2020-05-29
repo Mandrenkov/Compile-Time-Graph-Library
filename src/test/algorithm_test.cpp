@@ -9,7 +9,7 @@ using namespace ctgl;
 // Convenient Type Aliases
 // -----------------------------------------------------------------------------
 template <typename G, typename S, typename T>
-using PathType = decltype(path(G{}, S{}, T{}));
+using ShortestType = decltype(shortest(G{}, S{}, T{}));
 
 
 // Unit Tests
@@ -58,49 +58,46 @@ TEST(AlgorithmTest, Distance) {
     EXPECT_EQ(distance(forge::Pan{}, forge::N4{}, forge::N4{}), 0);
 }
 
-// Tests for the path() function.
-TEST(AlgorithmTest, Path) {
+// Tests for the shortest() function.
+TEST(AlgorithmTest, Shortest) {
     // Empty
-    EXPECT_TRUE((std::is_same<PathType<forge::Empty, forge::N1, forge::N1>, List<>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Empty, forge::N1, forge::N2>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Empty, forge::N1, forge::N1>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Empty, forge::N1, forge::N2>, List<>>::value));
 
     // Island
-    EXPECT_TRUE((std::is_same<PathType<forge::Island, forge::N1, forge::N1>, List<forge::N1>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Island, forge::N1, forge::N2>, List<>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Island, forge::N2, forge::N1>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Island, forge::N1, forge::N1>, List<forge::N1>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Island, forge::N1, forge::N2>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Island, forge::N2, forge::N1>, List<>>::value));
 
     // Loopback
-    EXPECT_TRUE((std::is_same<PathType<forge::Loopback, forge::N1, forge::N1>, List<forge::N1>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Loopback, forge::N1, forge::N1>, List<forge::N1>>::value));
 
     // Arrow
-    EXPECT_TRUE((std::is_same<PathType<forge::Arrow, forge::N1, forge::N2>, List<forge::N1, forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Arrow, forge::N2, forge::N1>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Arrow, forge::N1, forge::N2>, List<forge::N1, forge::N2>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Arrow, forge::N2, forge::N1>, List<>>::value));
 
     // Bridge
-    EXPECT_TRUE((std::is_same<PathType<forge::Bridge, forge::N1, forge::N2>, List<forge::N1, forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Bridge, forge::N2, forge::N1>, List<forge::N2, forge::N1>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Bridge, forge::N1, forge::N2>, List<forge::N1, forge::N2>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Bridge, forge::N2, forge::N1>, List<forge::N2, forge::N1>>::value));
 
     // Pan
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N1, forge::N1>, List<forge::N1>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N1, forge::N2>, List<forge::N1, forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N1, forge::N3>, List<forge::N1, forge::N2, forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N1, forge::N4>, List<forge::N1, forge::N4>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N1, forge::N1>, List<forge::N1>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N1, forge::N2>, List<forge::N1, forge::N2>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N1, forge::N3>, List<forge::N1, forge::N2, forge::N3>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N1, forge::N4>, List<forge::N1, forge::N4>>::value));
 
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N2, forge::N1>, List<>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N2, forge::N2>, List<forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N2, forge::N3>, List<forge::N2, forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N2, forge::N4>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N2, forge::N1>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N2, forge::N2>, List<forge::N2>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N2, forge::N3>, List<forge::N2, forge::N3>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N2, forge::N4>, List<>>::value));
 
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N3, forge::N1>, List<>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N3, forge::N2>, List<>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N3, forge::N3>, List<forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N3, forge::N4>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N3, forge::N1>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N3, forge::N2>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N3, forge::N3>, List<forge::N3>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N3, forge::N4>, List<>>::value));
 
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N4, forge::N1>, List<>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N4, forge::N2>, List<forge::N4, forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N4, forge::N3>, List<forge::N4, forge::N2, forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<PathType<forge::Pan, forge::N4, forge::N4>, List<forge::N4>>::value));
-
-    // Bow
-    // EXPECT_TRUE((std::is_same<PathType<forge::Bow, forge::N5, forge::N6>, List<forge::N5, forge::N7, forge::N6>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N4, forge::N1>, List<>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N4, forge::N2>, List<forge::N4, forge::N2>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N4, forge::N3>, List<forge::N4, forge::N2, forge::N3>>::value));
+    EXPECT_TRUE((std::is_same<ShortestType<forge::Pan, forge::N4, forge::N4>, List<forge::N4>>::value));
 }

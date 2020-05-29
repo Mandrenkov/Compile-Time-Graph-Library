@@ -1,5 +1,5 @@
 # Compile Time Graph Library ![Travis Status](https://travis-ci.org/Mandrenkov/Compile-Time-Graph-Library.svg?branch=master)
-The Compile Time Graph Library (CTGL) is a header-only C++ library that  implements `constexpr` graph algorithms and data structures.  Simply include `ctgl.h` and you're set!
+The Compile Time Graph Library (CTGL) is a C++ header-only library that  implements `constexpr` graph algorithms and data structures.  Simply include `ctgl.h` and you're set!
 
 ## Examples
 The first example finds the shortest distance between two nodes in a graph.
@@ -25,7 +25,7 @@ using graph = ctgl::Graph<nodes, edges>;
 constexpr int dist = ctgl::algorithm::findDistance(graph{}, n1{}, n3{});
 ```
 
-The second example solves the [TSP](https://en.wikipedia.org/wiki/Travelling_salesman_problem) in 𝒪(1) running time.
+The second example solves the [TSP](https://en.wikipedia.org/wiki/Travelling_salesman_problem) in O(1) running time.
 ```C++
 // Create Nodes with IDs 1, 2, 3, and 4.
 using n1 = ctgl::Node<1>;

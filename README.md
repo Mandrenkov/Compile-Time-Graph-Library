@@ -22,7 +22,7 @@ using edges = ctgl::List<e12, e13, e23>;
 using graph = ctgl::Graph<nodes, edges>;
 
 // Find the distance between Node 1 and Node 3 (i.e., 8).
-constexpr int dist = ctgl::distance(graph{}, n1{}, n3{});
+constexpr int dist = ctgl::algorithm::findDistance(graph{}, n1{}, n3{});
 ```
 
 ## Build Instructions

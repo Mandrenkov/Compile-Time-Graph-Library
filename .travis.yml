@@ -1,37 +1,23 @@
 language: cpp
+dist: bionic
 
 matrix:
-  # GCC 7
   include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-      env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    - name: "GCC"
+      os: linux
+      env: MATRIX_EVAL="CC=gcc && CXX=g++"
       compiler: gcc
 
-    # Clang 6.0
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
-            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
-              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-          packages:
-            - clang-6.0
-            - libstdc++6
-            - g++-7
-      env: MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
+    - name: "Clang"
+      os: linux
+      env: MATRIX_EVAL="CC=clang && CXX=clang++"
       compiler: clang
 
 # Install Google Test
 before_install:
   - eval "${MATRIX_EVAL}"
+  - sudo ln -s `which clang` /usr/bin/clang
+  - sudo ln -s `which clang++` /usr/bin/clang++
   - sudo apt-get install -y libgtest-dev cmake
   - sudo wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz
   - sudo tar xf release-1.7.0.tar.gz

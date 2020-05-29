@@ -25,12 +25,12 @@ TEST_FILES=$(wildcard $(TEST_DIR)/*_test.cpp)
 # ------------------------------------------------------------------------------
 all: bin
 	@rm -f $(MAIN_EXE)
-	@$(COMPILER) $(FLAGS) -std=c++17 -Wfatal-errors -o $(MAIN_EXE) $(CPP_DIR)/ctgl.cpp
+	@$(COMPILER) $(FLAGS) -std=c++17 -pedantic-errors -Wall -Wfatal-errors -o $(MAIN_EXE) $(CPP_DIR)/ctgl.cpp
 	@$(MAIN_EXE)
 
 test: bin
 	@rm -f $(TEST_EXE)
-	@$(COMPILER) $(FLAGS) -std=c++17 -Wfatal-errors -o $(TEST_EXE) $(TEST_FILES) -lgtest -lgtest_main
+	@$(COMPILER) $(FLAGS) -std=c++17 -pedantic-errors -Wall -Wfatal-errors -o $(TEST_EXE) $(TEST_FILES) -lgtest -lgtest_main
 	@$(TEST_EXE)
 
 bin:

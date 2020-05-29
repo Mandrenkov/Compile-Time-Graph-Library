@@ -1,63 +1,85 @@
+#include <iostream>
+
 #include <gtest/gtest.h>
 
 #include "../h/graph.h"
 #include "forge.h"
 
 using namespace ctgl;
+using namespace forge;
 
-
-// Convenient Type Aliases
-// -----------------------------------------------------------------------------
-template <typename G, typename N>
-using AdjacentType = decltype(ctgl::graph::adjacent(G{}, N{}));
-
-template <typename G, typename N>
-using ConnectedType = decltype(ctgl::graph::connected(G{}, N{}));
-
-
-// Unit Tests
-// -----------------------------------------------------------------------------
-// Tests for the adjacent() function.
-TEST(GraphTest, Adjacent) {
+// Unit tests for the ctgl::graph::getAdjacentNodes() function.
+TEST(GraphTest, GetAdjacentNodes) {
     // Empty
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Empty, forge::N1>, List<>>::value));
+    EXPECT_EQ(getAdjacentNodes(Empty{}, N1{}), List<>{});
 
     // Island
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Island, forge::N1>, List<>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Island, forge::N2>, List<>>::value));
+    EXPECT_EQ(getAdjacentNodes(Island{}, N1{}), List<>{});
+    EXPECT_EQ(getAdjacentNodes(Island{}, N2{}), List<>{});
 
     // Loopback
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Loopback, forge::N1>, List<forge::N1>>::value));
+    EXPECT_EQ(getAdjacentNodes(Loopback{}, N1{}), List<N1>{});
 
     // Arrow
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Arrow, forge::N1>, List<forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Arrow, forge::N2>, List<>>::value));
+    EXPECT_EQ(getAdjacentNodes(Arrow{}, N1{}), List<N2>{});
+    EXPECT_EQ(getAdjacentNodes(Arrow{}, N2{}), List<>{});
 
     // Bridge
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Bridge, forge::N1>, List<forge::N2>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Bridge, forge::N2>, List<forge::N1>>::value));
+    EXPECT_EQ(getAdjacentNodes(Bridge{}, N1{}), List<N2>{});
+    EXPECT_EQ(getAdjacentNodes(Bridge{}, N2{}), List<N1>{});
 
-    // Triangle
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Leap, forge::N1>, List<forge::N2, forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Leap, forge::N2>, List<forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<AdjacentType<forge::Leap, forge::N3>, List<>>::value));
+    // Leap
+    EXPECT_EQ(getAdjacentNodes(Leap{}, N1{}), (List<N2, N3>{}));
+    EXPECT_EQ(getAdjacentNodes(Leap{}, N2{}), List<N3>{});
+    EXPECT_EQ(getAdjacentNodes(Leap{}, N3{}), List<>{});
 }
 
-// Tests for the connected() function.
-TEST(GraphTest, Connected) {
+// Unit tests for the ctgl::graph::getConnectedNodes() function.
+TEST(GraphTest, GetConnectedNodes) {
     // Empty
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Empty, forge::N1>, List<>>::value));
+    EXPECT_EQ(getConnectedNodes(Empty{}, N1{}), List<>{});
 
     // Island
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Island, forge::N1>, List<forge::N1>>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Island, forge::N2>, List<>>::value));
+    EXPECT_EQ(getConnectedNodes(Island{}, N1{}), List<N1>{});
+    EXPECT_EQ(getConnectedNodes(Island{}, N2{}), List<>{});
 
     // Loopback
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Loopback, forge::N1>, List<forge::N1>>::value));
+    EXPECT_EQ(getConnectedNodes(Loopback{}, N1{}), List<N1>{});
 
     // Pan
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N1>, List<forge::N1, forge::N4, forge::N2, forge::N3>>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N2>, List<           forge::N2, forge::N3           >>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N3>, List<                      forge::N3           >>::value));
-    EXPECT_TRUE((std::is_same<ConnectedType<forge::Pan, forge::N4>, List<forge::N4, forge::N2, forge::N3>>::value));
+    EXPECT_EQ(getConnectedNodes(Pan{}, N1{}), (List<N4, N3, N2, N1>{}));
+    EXPECT_EQ(getConnectedNodes(Pan{}, N2{}), (List<N3, N2>{}));
+    EXPECT_EQ(getConnectedNodes(Pan{}, N3{}), List<N3>{});
+    EXPECT_EQ(getConnectedNodes(Pan{}, N4{}), (List<N3, N2, N4>{}));
+
+    // Triangle
+    EXPECT_EQ(getConnectedNodes(Triangle{}, N1{}), (List<N3, N2, N1>{}));
+    EXPECT_EQ(getConnectedNodes(Triangle{}, N2{}), (List<N1, N3, N2>{}));
+    EXPECT_EQ(getConnectedNodes(Triangle{}, N3{}), (List<N2, N1, N3>{}));
+}
+
+// Unit tests for the ctgl::graph::getOutgoingEdges() function.
+TEST(GraphTest, GetOutgoingEdges) {
+    // Empty
+    EXPECT_EQ(getOutgoingEdges(Empty{}, N1{}), List<>{});
+
+    // Island
+    EXPECT_EQ(getOutgoingEdges(Empty{}, N1{}), List<>{});
+    EXPECT_EQ(getOutgoingEdges(Empty{}, N2{}), List<>{});
+
+    // Loopback
+    EXPECT_EQ(getOutgoingEdges(Loopback{}, N1{}), List<E11>{});
+
+    // Arrow
+    EXPECT_EQ(getOutgoingEdges(Arrow{}, N1{}), List<E12>{});
+    EXPECT_EQ(getOutgoingEdges(Arrow{}, N2{}), List<>{});
+
+    // Bridge
+    EXPECT_EQ(getOutgoingEdges(Bridge{}, N1{}), List<E12>{});
+    EXPECT_EQ(getOutgoingEdges(Bridge{}, N2{}), List<E21>{});
+
+    // Leap
+    EXPECT_EQ(getOutgoingEdges(Leap{}, N1{}), (List<E12, E13>{}));
+    EXPECT_EQ(getOutgoingEdges(Leap{}, N2{}), List<E23>{});
+    EXPECT_EQ(getOutgoingEdges(Leap{}, N3{}), List<>{});
 }

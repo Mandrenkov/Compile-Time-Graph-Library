@@ -42,6 +42,10 @@ namespace ctgl {
         // Finds all outgoing Edges from the given Node in the provided Graph.
         template <typename G, typename N>
         constexpr auto getOutgoingEdges(G, N) noexcept;
+
+        // Reports whether Node |T| is reachable from Node |S| in the provided Graph.
+        template <typename G, typename S, typename T>
+        constexpr bool isConnected(G, S, T) noexcept;
     }
 
     // Definitions
@@ -120,6 +124,44 @@ namespace ctgl {
         template <typename N>
         constexpr auto getOutgoingEdges(N, List<>) noexcept {
             return List<>{};
+        }
+
+        template <typename G, typename S, typename T>
+        constexpr bool isConnected(G, S, T) noexcept {
+            constexpr auto nodes = typename G::Nodes{};
+            constexpr bool hasS = list::contains(S{}, nodes);
+            constexpr bool hasT = list::contains(T{}, nodes);
+            constexpr bool feasible = hasS && hasT;
+            if constexpr (!feasible) {
+                return false;
+            } else {
+                return isConnected(G{}, T{}, List<S>{}, List<>{});
+            }
+        }
+
+        template <typename G, typename T, typename N, typename... Ns, typename... Ps>
+        constexpr bool isConnected(G, T, List<N, Ns...>, List<Ps...>) noexcept {
+            constexpr bool cycle = list::contains(N{}, List<Ps...>{});
+            if constexpr (cycle) {
+                return true;
+            } else {
+                constexpr auto skip = isConnected(G{}, T{}, List<Ns...>{}, List<Ps...>{});
+                constexpr auto next = getAdjacentNodes(G{}, N{});
+                constexpr auto take = isConnected(G{}, T{}, next, List<N, Ps...>{});
+                return skip || take;
+            }
+        }
+
+        template <typename G, typename T, typename... Ps>
+        constexpr bool isConnected(G, T, List<>, List<Ps...>) noexcept {
+            // The neighbourhood is empty.
+            return false;
+        }
+
+        template <typename G, typename T, typename... Ns, typename... Ps>
+        constexpr bool isConnected(G, T, List<T, Ns...>, List<Ps...>) noexcept {
+            // The next Node in the neighbourhood matches the target Node.
+            return true;
         }
     }
 

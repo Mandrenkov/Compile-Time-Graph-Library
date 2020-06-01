@@ -83,3 +83,49 @@ TEST(GraphTest, GetOutgoingEdges) {
     EXPECT_EQ(getOutgoingEdges(Leap{}, N2{}), List<E23>{});
     EXPECT_EQ(getOutgoingEdges(Leap{}, N3{}), List<>{});
 }
+
+// Unit tests for the ctgl::graph::isConnected() function.
+TEST(GraphTest, IsConnected) {
+    // Empty
+    EXPECT_FALSE(isConnected(Empty{}, N1{}, N1{}));
+    EXPECT_FALSE(isConnected(Empty{}, N1{}, N2{}));
+
+    // Island
+    EXPECT_TRUE(isConnected(Island{}, N1{}, N1{}));
+    EXPECT_FALSE(isConnected(Island{}, N1{}, N2{}));
+    EXPECT_FALSE(isConnected(Island{}, N2{}, N1{}));
+
+    // Loopback
+    EXPECT_TRUE(isConnected(Loopback{}, N1{}, N1{}));
+    EXPECT_FALSE(isConnected(Loopback{}, N1{}, N2{}));
+
+    // Arrow
+    EXPECT_TRUE(isConnected(Arrow{}, N1{}, N2{}));
+    EXPECT_FALSE(isConnected(Arrow{}, N2{}, N1{}));
+
+    // Bridge
+    EXPECT_TRUE(isConnected(Bridge{}, N1{}, N2{}));
+    EXPECT_TRUE(isConnected(Bridge{}, N2{}, N1{}));
+
+    // Leap
+    EXPECT_TRUE(isConnected(Leap{}, N1{}, N2{}));
+    EXPECT_TRUE(isConnected(Leap{}, N1{}, N3{}));
+    EXPECT_TRUE(isConnected(Leap{}, N2{}, N3{}));
+    EXPECT_FALSE(isConnected(Leap{}, N2{}, N1{}));
+    EXPECT_FALSE(isConnected(Leap{}, N3{}, N1{}));
+    EXPECT_FALSE(isConnected(Leap{}, N3{}, N2{}));
+
+    // Pan
+    EXPECT_TRUE(isConnected(Pan{}, N1{}, N2{}));
+    EXPECT_TRUE(isConnected(Pan{}, N1{}, N3{}));
+    EXPECT_TRUE(isConnected(Pan{}, N1{}, N4{}));
+    EXPECT_TRUE(isConnected(Pan{}, N2{}, N3{}));
+    EXPECT_TRUE(isConnected(Pan{}, N4{}, N2{}));
+    EXPECT_TRUE(isConnected(Pan{}, N4{}, N4{}));
+    EXPECT_FALSE(isConnected(Pan{}, N2{}, N1{}));
+    EXPECT_FALSE(isConnected(Pan{}, N2{}, N4{}));
+    EXPECT_FALSE(isConnected(Pan{}, N3{}, N1{}));
+    EXPECT_FALSE(isConnected(Pan{}, N3{}, N2{}));
+    EXPECT_FALSE(isConnected(Pan{}, N3{}, N4{}));
+    EXPECT_FALSE(isConnected(Pan{}, N4{}, N1{}));
+}

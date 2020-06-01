@@ -43,6 +43,10 @@ namespace ctgl {
         template <typename G, typename N>
         constexpr auto getOutgoingEdges(G, N) noexcept;
 
+        // Reports whether the provided Graph is a strongly-connected component.
+        template <typename G>
+        constexpr bool isConnected(G) noexcept;
+
         // Reports whether Node |T| is reachable from Node |S| in the provided Graph.
         template <typename G, typename S, typename T>
         constexpr bool isConnected(G, S, T) noexcept;
@@ -124,6 +128,24 @@ namespace ctgl {
         template <typename N>
         constexpr auto getOutgoingEdges(N, List<>) noexcept {
             return List<>{};
+        }
+
+        template <typename G>
+        constexpr bool isConnected(G) noexcept {
+            // A Graph is a strongly-connected component if there exists a cycle
+            // which includes all Nodes in the Graph.
+            constexpr auto nodes = typename G::Nodes{};
+            return isConnected(G{}, nodes + nodes);
+        }
+
+        template <typename G, typename T1, typename T2, typename... Ts>
+        constexpr bool isConnected(G, List<T1, T2, Ts...>) noexcept {
+            return isConnected(G{}, T1{}, T2{}) && isConnected(G{}, List<T2, Ts...>{});
+        }
+
+        template <typename G, typename... Ts>
+        constexpr bool isConnected(G, List<Ts...>) noexcept {
+            return true;
         }
 
         template <typename G, typename S, typename T>

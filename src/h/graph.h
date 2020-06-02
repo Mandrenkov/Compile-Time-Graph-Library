@@ -43,6 +43,10 @@ namespace ctgl {
         template <typename G, typename N>
         constexpr auto getOutgoingEdges(G, N) noexcept;
 
+        // Reports whether the provided Graph has a cycle.
+        template <typename G>
+        constexpr bool hasCycle(G) noexcept;
+
         // Reports whether the provided Graph is a strongly-connected component.
         template <typename G>
         constexpr bool isConnected(G) noexcept;
@@ -128,6 +132,38 @@ namespace ctgl {
         template <typename N>
         constexpr auto getOutgoingEdges(N, List<>) noexcept {
             return List<>{};
+        }
+
+        template <typename G>
+        constexpr bool hasCycle(G) noexcept {
+            constexpr auto nodes = typename G::Nodes{};
+            if constexpr (list::empty(nodes)) {
+                return false;
+            } else {
+                constexpr auto next = getAdjacentNodes(G{}, list::front(nodes));
+                return hasCycle(G{}, nodes, next);
+            }
+        }
+
+        template <typename G, typename T, typename... Ts, typename N, typename... Ns>
+        constexpr bool hasCycle(G, List<T, Ts...>, List<N, Ns...>) noexcept {
+            constexpr bool cycle = isConnected(G{}, N{}, T{});
+            if constexpr (cycle) {
+                return true;
+            } else {
+                return hasCycle(G{}, List<T, Ts...>{}, List<Ns...>{});
+            }
+        }
+
+        template <typename G, typename T1, typename T2, typename... Ts>
+        constexpr bool hasCycle(G, List<T1, T2, Ts...>, List<>) noexcept {
+            constexpr auto next = getAdjacentNodes(G{}, T2{});
+            return hasCycle(G{}, List<T2, Ts...>{}, next);
+        }
+
+        template <typename G, typename... Ts>
+        constexpr bool hasCycle(G, List<Ts...>, List<>) noexcept {
+            return false;
         }
 
         template <typename G>

@@ -84,6 +84,22 @@ TEST(GraphTest, GetOutgoingEdges) {
     EXPECT_EQ(getOutgoingEdges(Leap{}, N3{}), List<>{});
 }
 
+// Unit tests for the ctgl::graph::hasCycle() functions.
+TEST(GraphTest, HasCycle) {
+    // Cyclic
+    EXPECT_TRUE(hasCycle(Loopback{}));
+    EXPECT_TRUE(hasCycle(Bridge{}));
+    EXPECT_TRUE(hasCycle(Triangle{}));
+    EXPECT_TRUE(hasCycle(Dipper{}));
+
+    // Acyclic
+    EXPECT_FALSE(hasCycle(Empty{}));
+    EXPECT_FALSE(hasCycle(Island{}));
+    EXPECT_FALSE(hasCycle(Arrow{}));
+    EXPECT_FALSE(hasCycle(Leap{}));
+    EXPECT_FALSE(hasCycle(Pan{}));
+}
+
 // Unit tests for the ctgl::graph::isConnected() functions.
 TEST(GraphTest, IsConnected) {
     // Empty

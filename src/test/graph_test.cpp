@@ -144,4 +144,19 @@ TEST(GraphTest, IsConnected) {
     EXPECT_FALSE(isConnected(Pan{}, N3{}, N2{}));
     EXPECT_FALSE(isConnected(Pan{}, N3{}, N4{}));
     EXPECT_FALSE(isConnected(Pan{}, N4{}, N1{}));
+
+    // Dipper
+    EXPECT_FALSE(isConnected(Dipper{}));
+    EXPECT_TRUE(isConnected(Dipper{}, N1{}, N2{}));
+    EXPECT_TRUE(isConnected(Dipper{}, N1{}, N3{}));
+    EXPECT_TRUE(isConnected(Dipper{}, N2{}, N1{}));
+    EXPECT_TRUE(isConnected(Dipper{}, N2{}, N3{}));
+    EXPECT_TRUE(isConnected(Dipper{}, N3{}, N1{}));
+    EXPECT_TRUE(isConnected(Dipper{}, N3{}, N2{}));
+    EXPECT_TRUE(isConnected(Dipper{}, N4{}, N1{}));
+    EXPECT_TRUE(isConnected(Dipper{}, N4{}, N2{}));
+    EXPECT_TRUE(isConnected(Dipper{}, N4{}, N3{}));
+    EXPECT_FALSE(isConnected(Dipper{}, N1{}, N4{}));
+    EXPECT_FALSE(isConnected(Dipper{}, N2{}, N4{}));
+    EXPECT_FALSE(isConnected(Dipper{}, N3{}, N4{}));
 }

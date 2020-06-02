@@ -165,7 +165,7 @@ namespace ctgl {
         constexpr bool isConnected(G, T, List<N, Ns...>, List<Ps...>) noexcept {
             constexpr bool cycle = list::contains(N{}, List<Ps...>{});
             if constexpr (cycle) {
-                return true;
+                return false;
             } else {
                 constexpr auto skip = isConnected(G{}, T{}, List<Ns...>{}, List<Ps...>{});
                 constexpr auto next = getAdjacentNodes(G{}, N{});

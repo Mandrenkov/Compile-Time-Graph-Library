@@ -85,6 +85,10 @@ namespace forge {
     //  '--> (N7) ---^
     using Bow = Graph<List<N5, N6, N7>, List<E56, E57, E76>>;
 
+    // (N1) --> (N2) --> (N3) <-- (N4)
+    //  ^-----------------'
+    using Dipper = Graph<List<N1, N2, N3, N4>, List<E12, E23, E31, E43>>;
+
     // Graphs with Negative Cycles
     // -------------------------------------------------------------------------
 

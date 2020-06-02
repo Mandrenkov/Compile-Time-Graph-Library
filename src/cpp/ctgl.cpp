@@ -49,7 +49,7 @@ int main() {
         using e31 = ctgl::Edge<n3, n1, 3>;
         using e34 = ctgl::Edge<n3, n4, 1>;
         using e41 = ctgl::Edge<n4, n1, 3>;
-        using e43 = ctgl::Edge<n4, n1, 4>;
+        using e43 = ctgl::Edge<n4, n3, 4>;
         using edges = ctgl::List<e12, e23, e24, e31, e34, e41, e43>;
 
         // Compose the Nodes and Edges to form a Graph.

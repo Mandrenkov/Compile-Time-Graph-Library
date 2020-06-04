@@ -1,6 +1,7 @@
 #pragma once
 
 #include "list.h"
+#include "path.h"
 #include "utility.h"
 
 namespace ctgl {
@@ -46,6 +47,10 @@ namespace ctgl {
         // Reports whether the provided Graph has a cycle.
         template <typename G>
         constexpr bool hasCycle(G) noexcept;
+
+        // Reports whether the provided Graph has a negative cycle.
+        template <typename G>
+        constexpr bool hasNegativeCycle(G) noexcept;
 
         // Reports whether the provided Graph is a strongly-connected component.
         template <typename G>
@@ -163,6 +168,52 @@ namespace ctgl {
 
         template <typename G, typename... Ts>
         constexpr bool hasCycle(G, List<Ts...>, List<>) noexcept {
+            return false;
+        }
+
+        template <typename G>
+        constexpr bool hasNegativeCycle(G) noexcept {
+            constexpr auto nodes = typename G::Nodes{};
+            return hasNegativeCycle(G{}, nodes);
+        }
+
+        template <typename G, typename N, typename... Ns>
+        constexpr bool hasNegativeCycle(G, List<N, Ns...>) noexcept {
+            constexpr auto edges = getOutgoingEdges(G{}, N{});
+            constexpr auto take = hasNegativeCycle(G{}, N{}, edges, Path<>{});
+            constexpr auto skip = hasNegativeCycle(G{}, List<Ns...>{});
+            return take || skip;
+        }
+
+        template <typename G>
+        constexpr bool hasNegativeCycle(G, List<>) noexcept {
+            // The set of Nodes which could be part of a negative cycle is empty.
+            return false;
+        }
+
+        template <typename G, typename N, typename T, typename H, int W, typename... Es, typename... Ps>
+        constexpr bool hasNegativeCycle(G, N, List<Edge<T, H, W>, Es...>, Path<Ps...>) noexcept {
+            constexpr bool cycle = list::contains(H{}, path::nodes(List<Ps...>{}));
+            if constexpr (cycle) {
+                return false;
+            } else {
+                constexpr auto edges = getOutgoingEdges(G{}, H{});
+                constexpr bool take = hasNegativeCycle(G{}, N{}, edges, Path<Ps..., Edge<T, H, W>>{});
+                constexpr bool skip = hasNegativeCycle(G{}, N{}, List<Es...>{}, Path<Ps...>{});
+                return take || skip;
+            }
+        }
+
+        template <typename G, typename N, typename T, int W, typename... Es, typename... Ps>
+        constexpr bool hasNegativeCycle(G, N, List<Edge<T, N, W>, Es...>, Path<Ps...>) noexcept {
+            // The current Edge brings the Path back to the starting Node.
+            constexpr bool done = path::length(List<Edge<T, N, W>, Ps...>{}) < 0;
+            return done || hasNegativeCycle(G{}, N{}, List<Es...>{}, Path<Ps...>{});
+        }
+
+        template <typename G, typename N, typename... Ps>
+        constexpr bool hasNegativeCycle(G, N, List<>, Path<Ps...>) noexcept {
+            // There are no more Edges to connect the Path to the starting Node.
             return false;
         }
 

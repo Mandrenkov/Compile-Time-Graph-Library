@@ -100,6 +100,27 @@ TEST(GraphTest, HasCycle) {
     EXPECT_FALSE(hasCycle(Pan{}));
 }
 
+// Unit tests for the ctgl::graph::hasNegativeCycle() functions.
+TEST(GraphTest, HasNegativeCycle) {
+    // Negative Cyclic
+    EXPECT_TRUE(hasNegativeCycle(Alone{}));
+    EXPECT_TRUE(hasNegativeCycle(Debate{}));
+    EXPECT_TRUE(hasNegativeCycle(Spiral{}));
+    EXPECT_TRUE(hasNegativeCycle(Hole{}));
+    EXPECT_TRUE(hasNegativeCycle(Magnet{}));
+
+    // Negative Acyclic
+    EXPECT_FALSE(hasNegativeCycle(Empty{}));
+    EXPECT_FALSE(hasNegativeCycle(Island{}));
+    EXPECT_FALSE(hasNegativeCycle(Loopback{}));
+    EXPECT_FALSE(hasNegativeCycle(Arrow{}));
+    EXPECT_FALSE(hasNegativeCycle(Bridge{}));
+    EXPECT_FALSE(hasNegativeCycle(Leap{}));
+    EXPECT_FALSE(hasNegativeCycle(Triangle{}));
+    EXPECT_FALSE(hasNegativeCycle(Pan{}));
+    EXPECT_FALSE(hasNegativeCycle(Dipper{}));
+}
+
 // Unit tests for the ctgl::graph::isConnected() functions.
 TEST(GraphTest, IsConnected) {
     // Empty

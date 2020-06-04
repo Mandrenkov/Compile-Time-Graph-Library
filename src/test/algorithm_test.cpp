@@ -65,16 +65,16 @@ TEST(AlgorithmTest, FindDistance) {
     EXPECT_EQ(algorithm::findDistance(Debate{}, N1{}, N1{}), 0);
     EXPECT_EQ(algorithm::findDistance(Debate{}, N1{}, N2{}), -2);
     EXPECT_EQ(algorithm::findDistance(Debate{}, N2{}, N2{}), 0);
-    EXPECT_EQ(algorithm::findDistance(Debate{}, N2{}, N1{}), -2);
+    EXPECT_EQ(algorithm::findDistance(Debate{}, N2{}, N1{}), -4);
 
     // Spiral
     EXPECT_EQ(algorithm::findDistance(Spiral{}, N1{}, N1{}), 0);
     EXPECT_EQ(algorithm::findDistance(Spiral{}, N1{}, N2{}), -2);
-    EXPECT_EQ(algorithm::findDistance(Spiral{}, N1{}, N3{}), -3);
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N1{}, N3{}), -4);
 
-    EXPECT_EQ(algorithm::findDistance(Spiral{}, N2{}, N1{}), -4);
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N2{}, N1{}), -5);
     EXPECT_EQ(algorithm::findDistance(Spiral{}, N2{}, N2{}), 0);
-    EXPECT_EQ(algorithm::findDistance(Spiral{}, N2{}, N3{}), -1);
+    EXPECT_EQ(algorithm::findDistance(Spiral{}, N2{}, N3{}), -2);
 
     EXPECT_EQ(algorithm::findDistance(Spiral{}, N3{}, N1{}), -3);
     EXPECT_EQ(algorithm::findDistance(Spiral{}, N3{}, N2{}), -5);

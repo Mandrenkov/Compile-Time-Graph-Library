@@ -48,7 +48,7 @@ namespace forge {
     using NE21 = Edge<N2, N1, -4>;
     using NE22 = Edge<N2, N2, -1>;
     using NE23 = Edge<N2, N3, -2>;
-    using NE24 = Edge<N2, N5, -3>;
+    using NE24 = Edge<N2, N4, -3>;
 
     using NE31 = Edge<N3, N1, -3>;
     using NE32 = Edge<N3, N2, -4>;

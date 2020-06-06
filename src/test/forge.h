@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../h/graph.h"
 
 using namespace ctgl;

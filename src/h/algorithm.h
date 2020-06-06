@@ -1,3 +1,5 @@
+#pragma once
+
 #include "graph.h"
 #include "list.h"
 #include "path.h"
@@ -27,7 +29,6 @@ namespace ctgl {
         template <typename G, typename S, typename T>
         constexpr int findDistance(G, S, T) noexcept;
     }
-
 
     // Definitions
     // -------------------------------------------------------------------------
@@ -117,7 +118,6 @@ namespace ctgl {
                 return findShortestRoutes(G{}, orders);
             }
         }
-
 
         template <typename G, typename S, typename T>
         constexpr int findDistance(G, S, T) noexcept {

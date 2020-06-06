@@ -6,7 +6,6 @@
 using namespace ctgl;
 using namespace forge;
 
-
 // Unit tests for the ctgl::algorithm::findDistance() function.
 TEST(AlgorithmTest, FindDistance) {
     // Empty
